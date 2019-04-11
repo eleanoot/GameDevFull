@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 public class Stats
 {
     private static float chosenTime;
+    // Used to match up the 
+    private static Vector2 lastPos = new Vector2(0.5f, -4.5f);
 
     // Count the number of ALL rooms the player's passed through.
     private static int roomCount = 0;
@@ -78,6 +80,18 @@ public class Stats
         itemRoomCount = 0;
         activeItemCharge = 0;
         currentCharge = 0;
+    }
+
+    public static Vector2 LastPos
+    {
+        get
+        {
+            return lastPos;
+        }
+        set
+        {
+            lastPos = value;
+        }
     }
 
     /* RUN TIME */

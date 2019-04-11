@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        gameObject.transform.SetPositionAndRotation(Stats.LastPos, Quaternion.identity);
         anim = GetComponent<Animator>();
         rend = GetComponent<Renderer>();
         boxCollider = GetComponent<BoxCollider2D>();
