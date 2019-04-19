@@ -11,6 +11,12 @@ public class Player : MonoBehaviour
     public Tilemap wallsTilemap;
     public Tilemap obstaclesTilemap;
 
+    public AudioClip hurtSfx;
+    public AudioClip scratchSfx;
+    public AudioClip steps1Sfx;
+    public AudioClip steps2Sfx;
+    public AudioClip blockedSfx;
+
     // The layer for which to check for collider collisions with. 
     public LayerMask unitsMask;
 
@@ -37,8 +43,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        // If the player is still moving, do nothing this update.
-        if (isMoving || onCooldown)
+        // If the player is still moving or we're paused, do nothing this update.
+        if (isMoving || onCooldown || Time.timeScale == 0)
             return;
        
         // Get the move direction.
@@ -62,6 +68,10 @@ public class Player : MonoBehaviour
     // This won't register if both actions are in the same frame due to the coroutine.
     private void LateUpdate()
     {
+        // Do nothing if paused.
+        if (Time.timeScale == 0)
+            return;
+
         // Use active item. 
         if (Input.GetKeyDown("space"))
         {
@@ -102,6 +112,7 @@ public class Player : MonoBehaviour
                 anim.ResetTrigger("turnRight");
                 anim.ResetTrigger("turnUp");
                 anim.ResetTrigger("turnDown");
+                Stats.Facing = Stats.Direction.LEFT;
                 break;
             case 'd':
                 xDir = 1;
@@ -109,6 +120,7 @@ public class Player : MonoBehaviour
                 anim.ResetTrigger("turnLeft");
                 anim.ResetTrigger("turnUp");
                 anim.ResetTrigger("turnDown");
+                Stats.Facing = Stats.Direction.RIGHT;
                 break;
             case 'w':
                 yDir = 1;
@@ -116,6 +128,7 @@ public class Player : MonoBehaviour
                 anim.ResetTrigger("turnRight");
                 anim.ResetTrigger("turnLeft");
                 anim.ResetTrigger("turnDown");
+                Stats.Facing = Stats.Direction.UP;
                 break;
             case 's':
                 yDir = -1;
@@ -123,6 +136,7 @@ public class Player : MonoBehaviour
                 anim.ResetTrigger("turnRight");
                 anim.ResetTrigger("turnUp");
                 anim.ResetTrigger("turnLeft");
+                Stats.Facing = Stats.Direction.DOWN;
                 break;
         }
 
@@ -146,6 +160,8 @@ public class Player : MonoBehaviour
             hit.transform.gameObject.SendMessage("TakeDamage", Stats.Dmg);
             
         }
+
+        SoundManager.instance.PlaySingle(scratchSfx);
         
     }
 
@@ -159,6 +175,7 @@ public class Player : MonoBehaviour
             anim.ResetTrigger("turnRight");
             anim.ResetTrigger("turnUp");
             anim.ResetTrigger("turnDown");
+            Stats.Facing = Stats.Direction.LEFT;
         }
         else if (xDir > 0)
         {
@@ -166,6 +183,7 @@ public class Player : MonoBehaviour
             anim.ResetTrigger("turnLeft");
             anim.ResetTrigger("turnUp");
             anim.ResetTrigger("turnDown");
+            Stats.Facing = Stats.Direction.RIGHT;
         }
         else if (yDir > 0)
         {
@@ -173,6 +191,7 @@ public class Player : MonoBehaviour
             anim.ResetTrigger("turnRight");
             anim.ResetTrigger("turnLeft");
             anim.ResetTrigger("turnDown");
+            Stats.Facing = Stats.Direction.UP;
         }
         else if (yDir < 0)
         {
@@ -180,6 +199,7 @@ public class Player : MonoBehaviour
             anim.ResetTrigger("turnRight");
             anim.ResetTrigger("turnUp");
             anim.ResetTrigger("turnLeft");
+            Stats.Facing = Stats.Direction.DOWN;
         }
         Vector2 startTile = transform.position;
         Vector2 targetTile = startTile + new Vector2(xDir, yDir);
@@ -231,6 +251,7 @@ public class Player : MonoBehaviour
     // 'Flash' the sprite when attacked.
     public IEnumerator IsHit()
     {
+        SoundManager.instance.PlaySingle(hurtSfx);
         for (int i = 0; i < 5; i++)
         {
             rend.enabled = true;
@@ -262,6 +283,7 @@ public class Player : MonoBehaviour
        
         // Coroutine has finished moving the player.
         isMoving = false;
+        SoundManager.instance.RandomizeSfx(steps1Sfx, steps2Sfx);
     }
 
     // Moves the player in the intended direction, then 'bounces' back to where they were. 
@@ -287,6 +309,8 @@ public class Player : MonoBehaviour
 
             yield return null;
         }
+
+        SoundManager.instance.PlaySingle(blockedSfx);
 
         // Move back to the original position.
         sqrRemainingDistance = (transform.position - originalPos).sqrMagnitude;

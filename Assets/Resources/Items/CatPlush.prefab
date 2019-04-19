@@ -97,6 +97,7 @@ MonoBehaviour:
   itemDesc: Enemies target where placed for 3 hits
   itemType: 1
   rarity: 1
+  putdownSfx: {fileID: 8300000, guid: c51a5329ed941924d9331ee038dd8911, type: 3}
 --- !u!61 &7674327010021819719
 BoxCollider2D:
   m_ObjectHideFlags: 0

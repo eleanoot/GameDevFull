@@ -14,7 +14,12 @@ public class ExitRoom : MonoBehaviour
         {
             // If any items are active on the board, disable them.
             if (Stats.active != null)
+            {
                 Stats.active.gameObject.SetActive(false);
+                // Perform any item specific on room clear tidyup. 
+                Stats.active.OnRoomClear();
+            }
+                
             // Add the room cleared score. 
             Stats.AddScore(50 * (Stats.ItemRoomCount+1));
             // Add a score bonus based on the amount of health the player has on room clear.
@@ -29,6 +34,14 @@ public class ExitRoom : MonoBehaviour
             }
                 
             Stats.PreviousHp = Stats.Hp;
+
+            // Reset the enemy target in case that got missed for room-long effects. 
+            GameObject[] enemies = enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (GameObject e in enemies)
+            {
+                e.BroadcastMessage("UpdateTarget", GameObject.FindGameObjectWithTag("Player").transform);
+            }
+
             // Reload the room to generate a new one. 
             SceneManager.LoadScene("Runner");
         }

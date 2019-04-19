@@ -10,6 +10,8 @@ public class CatPlush : Item
     // Decoy will be destroyed when it runs out of health. 
     private int hp = 3;
 
+    public AudioClip putdownSfx;
+
     // Keep hold of a reference to all the enemies for use in updating target later.
     GameObject[] enemies;
 
@@ -44,6 +46,7 @@ public class CatPlush : Item
             // 'Spawn' a decoy at the current tile the player stands at: reactivate the item and update its position. 
             gameObject.transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
             gameObject.SetActive(true);
+            SoundManager.instance.PlaySingle(putdownSfx);
             // Update the targets of all enemies to focus on the decoy while it's active. 
             enemies = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject e in enemies)

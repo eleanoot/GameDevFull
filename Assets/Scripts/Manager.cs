@@ -21,6 +21,11 @@ public class Manager : MonoBehaviour
     private static Text scoreText;
     private static Text multiplierText;
 
+    private float countdownTime = 4.0f;
+    public Text countdownText;
+
+    private static GameObject[] pauseObjects;
+
    
     // Keep a reference to the current timer running process to be able to stop and restart it between runs. 
     Coroutine timerCoroutine;
@@ -48,6 +53,9 @@ public class Manager : MonoBehaviour
         //Sets this to not be destroyed when reloading scene
         DontDestroyOnLoad(gameObject);
 
+
+        Input.ResetInputAxes();
+
         gameOverImage = GameObject.Find("GameOver");
         gameOverText = GameObject.Find("GameOverText").GetComponent<Text>();
         timerText = GameObject.Find("TimerText").GetComponent<Text>();
@@ -58,10 +66,11 @@ public class Manager : MonoBehaviour
         // Prevent the UI assignment being reset.
         restartButton.GetComponent<Button>().onClick.AddListener(instance.RestartGame);
         homeButton.GetComponent<Button>().onClick.AddListener(instance.ReturnHome);
-        gameOverImage.SetActive(false);
-        restartButton.SetActive(false);
-        homeButton.SetActive(false);
-
+        //gameOverImage.SetActive(false);
+        //restartButton.SetActive(false);
+        //homeButton.SetActive(false);
+        pauseObjects = GameObject.FindGameObjectsWithTag("ShowOnPause");
+        hidePaused();
         Stats.onScoreChangedCallback += UpdateScore;
         Stats.onMultiplierChangedCallback += UpdateMultiplier;
 
@@ -69,15 +78,30 @@ public class Manager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {
+        Time.timeScale = 0;
         // Reset any stats carried over from anywhere else.
         Stats.Reset();
         // Refill the item pools. 
         ItemManager.instance.RefillPools();
-        SoundManager.instance.bgSource.Play();
+        yield return StartCoroutine(Countdown(Time.realtimeSinceStartup));
+    }
+
+    IEnumerator Countdown(float start)
+    {
+        while (countdownTime > 0)
+        {
+            countdownTime -= 1.0f;
+            countdownText.text = (countdownTime).ToString("0");
+            yield return new WaitForSecondsRealtime(1);
+        }
+        Time.timeScale = 1;
+        countdownText.text = "";
+        SoundManager.instance.runSource.Play();
         timerCoroutine = StartCoroutine(levelTimer());
     }
+   
 
     IEnumerator levelTimer()
     {
@@ -141,18 +165,54 @@ public class Manager : MonoBehaviour
         // Restart timer.
         ResetTimer(Stats.ChosenTime);
         // Restart the background music. 
-        SoundManager.instance.bgSource.Stop();
-        SoundManager.instance.bgSource.Play();
+        SoundManager.instance.runSource.Stop();
+        SoundManager.instance.runSource.Play();
 
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (Time.timeScale == 1)
+            {
+                Time.timeScale = 0;
+                showPaused();
+            }
+            else if (Time.timeScale == 0)
+            {
+                Time.timeScale = 1;
+                hidePaused();
+            }
+        }
+    }
+
+    public void showPaused()
+    {
+        foreach (GameObject g in pauseObjects)
+        {
+            g.SetActive(true);
+        }
+    }
+
+    //hides objects with ShowOnPause tag
+    public void hidePaused()
+    {
+        foreach (GameObject g in pauseObjects)
+        {
+            g.SetActive(false);
+        }
     }
 
     public void ReturnHome()
     {
         Stats.Reset();
+        Stats.LastPos = new Vector2(0.5f, 0.5f);
         StopCoroutine(timerCoroutine);
         Time.timeScale = 1;
-        SoundManager.instance.bgSource.Stop();
+        SoundManager.instance.runSource.Stop();
         SceneManager.LoadScene("Hub");
+        SoundManager.instance.hubSource.Play();
         Destroy(gameObject);
     }
 

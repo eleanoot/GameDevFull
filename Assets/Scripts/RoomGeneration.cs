@@ -82,7 +82,6 @@ public class RoomGeneration : MonoBehaviour
                 } while (chosenItems[0] == nextItem.gameObject || chosenItems[1] == nextItem.gameObject);
                 chosenItems[i] = nextItem.gameObject;
             }
-
             this.currentRoom.PopulateItems(chosenItems);
             this.currentRoom.AddPopulationToTilemap(obstacleTilemap, this.obstacleTiles);
 

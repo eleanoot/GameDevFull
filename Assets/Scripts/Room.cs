@@ -154,7 +154,7 @@ public class Room
     }
 
     // Look for random areas on the grid until one is available to place tiles in. 
-    private List<Vector2Int> FindFreeRegion(Vector2Int sizeInTiles)
+    private List<Vector2Int> FindFreeRegion(Vector2Int sizeInTiles, Enemy enemyDetails = null)
     {
         List<Vector2Int> region = new List<Vector2Int>();
         // Continue until a valid region for this tile set is found. 
@@ -174,6 +174,17 @@ public class Room
                 centreX = 7;
             if (centreY < 1)
                 centreY = 1; // Prevent an enemy spawning on the first row - unfair if directly in front of the player right away!
+
+            if (enemyDetails != null)
+            {
+                if (enemyDetails.edgeEnemy)
+                {
+                    if (centreX < 5)
+                        centreX = 0;
+                    else
+                        centreX = 7;
+                }
+            }
 
             Vector2Int centreTile = new Vector2Int(centreX, centreY);
 
@@ -288,6 +299,8 @@ public class Room
                 choiceIndex = ReduceNumber(choiceIndex, possiblePrefabs.Length);
 
             GameObject prefab = possiblePrefabs[choiceIndex];
+
+            Enemy enemyDetails = prefab.GetComponent<Enemy>();
             
             List<Vector2Int> region;
             // Repeat finding a position for this enemy until it's on a valid row and not close to the last enemy placed 
@@ -296,7 +309,7 @@ public class Room
             do
             {
                 attemptCount++;
-                region = FindFreeRegion(new Vector2Int(1, 1));
+                region = FindFreeRegion(new Vector2Int(1, 1), enemyDetails);
             } while (elementsPerRow[region[0].y] == MAX_ROW_AMOUNT || CloseRegion(region[0]) && attemptCount < 10);
 
             if (this.population[region[0].x, region[0].y] == "")
@@ -353,6 +366,13 @@ public class Room
     // subtract the maximum value. 
     public int ReduceNumber(int num, int max)
     {
+        //int result = num;
+        //do
+        //{
+        //    result %= max;
+        //} while (result >= max);
+
+
         int result = num;
         do
         {
@@ -363,7 +383,8 @@ public class Room
 
             if (result <= 10)
             {
-                result = Mathf.Abs(result - max);
+                //result = Mathf.Abs(result - max);
+                result %= max;
             }
         } while (result >= max);
 

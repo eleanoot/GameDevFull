@@ -11,6 +11,8 @@ public class StartRun : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Stats.ChosenTime = runTime;
+        Stats.Reset();
+        SoundManager.instance.hubSource.Stop();
         SceneManager.LoadScene("Runner");
     }
 }

@@ -7,6 +7,8 @@ public class StartTutorial : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        SoundManager.instance.hubSource.Stop();
         SceneManager.LoadScene("Tutorial");
+        SoundManager.instance.tutorialSource.Play();
     }
 }

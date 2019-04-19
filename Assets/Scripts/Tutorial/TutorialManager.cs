@@ -27,6 +27,12 @@ public class TutorialManager : MonoBehaviour
 
         //Sets this to not be destroyed when reloading scene
         DontDestroyOnLoad(gameObject);
+       
+    }
+
+    private void Start()
+    {
+        SoundManager.instance.tutorialSource.Play();
     }
 
     public void OnRoomClear()

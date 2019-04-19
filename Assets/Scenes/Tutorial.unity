@@ -17049,6 +17049,31 @@ PrefabInstance:
       propertyPath: obstaclesTilemap
       value: 
       objectReference: {fileID: 1964054489}
+    - target: {fileID: 4754393087213972442, guid: 8864cb79d332cba4cb4828a6b045fde0,
+        type: 3}
+      propertyPath: hurtSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 9f9df2c507e5897418655e28c9ff856e, type: 3}
+    - target: {fileID: 4754393087213972442, guid: 8864cb79d332cba4cb4828a6b045fde0,
+        type: 3}
+      propertyPath: scratchSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 8632b4c558227a643a6cc36349c70ee9, type: 3}
+    - target: {fileID: 4754393087213972442, guid: 8864cb79d332cba4cb4828a6b045fde0,
+        type: 3}
+      propertyPath: steps1Sfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 18f1ff003e8fbdb44aba8266f6e1d168, type: 3}
+    - target: {fileID: 4754393087213972442, guid: 8864cb79d332cba4cb4828a6b045fde0,
+        type: 3}
+      propertyPath: steps2Sfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 59cd085e234f32e4daddd2e589174a96, type: 3}
+    - target: {fileID: 4754393087213972442, guid: 8864cb79d332cba4cb4828a6b045fde0,
+        type: 3}
+      propertyPath: blockedSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: c51a5329ed941924d9331ee038dd8911, type: 3}
     - target: {fileID: 4754393087213972441, guid: 8864cb79d332cba4cb4828a6b045fde0,
         type: 3}
       propertyPath: m_CollisionDetection
@@ -19488,6 +19513,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 0.5
   damageDealt: 0.5
+  edgeEnemy: 0
   movementTime: 0.2
   obstaclesTilemap: {fileID: 1964054489}
   wallsTilemap: {fileID: 1057948820}
@@ -19528,6 +19554,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 0.5
   damageDealt: 0.5
+  edgeEnemy: 0
   movementTime: 0.15
   obstaclesTilemap: {fileID: 1964054489}
   wallsTilemap: {fileID: 1057948820}

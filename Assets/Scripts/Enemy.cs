@@ -23,10 +23,13 @@ public abstract class Enemy : MonoBehaviour
     protected float delayTimer = 0f;
 
     // Reference to the sprite renderer to flash the sprite on hit. 
-    private Renderer rend;
+    protected Renderer rend;
 
     // Used to freeze the enemy from attacking when their HP is zero so the player can't be taken out by a technically defeated enemy unfairly. 
     protected bool defeated;
+
+    // Used to ensure an enemy that should be at the borders of the grid actually is. 
+    public bool edgeEnemy;
     
 
     // Start is called before the first frame update

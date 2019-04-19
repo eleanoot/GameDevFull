@@ -122,13 +122,16 @@ public class MouseBasic : Enemy
         // Does this next tile contain the target?
         if (x == Stats.TransformToGrid(target.transform.position).x && y == Stats.TransformToGrid(target.transform.position).y)
         {
-             // Action on hit depends if the target is still the player or not. For attacking items like the decoy.  
-             if (target.transform != GameObject.FindGameObjectWithTag("Player").transform)
-             {
+            // Action on hit depends if the target is still the player or not. For attacking items like the decoy.  
+            if (target.transform != GameObject.FindGameObjectWithTag("Player").transform)
+            {
                 target.gameObject.SendMessage("IsHit");
-             }
-             else if (Stats.TakeDamage(damageDealt))
-                StartCoroutine(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().IsHit()); // only flash the sprite if damage has actually been taken: prevent overlap of player being left invisible on final damage hit. 
+            }
+            else if (!Stats.Shield)
+            {
+                if (Stats.TakeDamage(damageDealt))
+                    StartCoroutine(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().IsHit()); // only flash the sprite if damage has actually been taken: prevent overlap of player being left invisible on final damage hit. 
+            }
         }
         // Otherwise move into this tile. 
         else
@@ -202,7 +205,7 @@ public class MouseBasic : Enemy
     }
 
     // Need to check for collisions with both enemies, obstacles, and the outer walls.
-    // Obstacles tested by tilemap check, enemie by raycast.
+    // Obstacles tested by tilemap check, enemies by raycast.
     private bool CheckForCollision(Vector2 start, Vector2 end)
     {
         bool hasObstacle = getCell(obstaclesTilemap, end) != null;

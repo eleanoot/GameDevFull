@@ -9,6 +9,16 @@ using UnityEngine.SceneManagement;
 
 public class Stats
 {
+    public enum Direction
+    {
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN,
+    }
+
+    private static Direction facing;
+
     private static float chosenTime;
     // Used to match up the 
     private static Vector2 lastPos = new Vector2(0.5f, -4.5f);
@@ -45,6 +55,8 @@ public class Stats
     public static List<Item> passives = new List<Item>();
     public static Item active;
 
+    private static bool shield = false;
+
     // Active item charge. Stored in here rather than in item to retain between rooms. 
     // The amount of charge this item needs to be used. 
     private static int activeItemCharge;
@@ -80,6 +92,8 @@ public class Stats
         itemRoomCount = 0;
         activeItemCharge = 0;
         currentCharge = 0;
+
+        lastPos = new Vector2(0.5f, -4.5f);
     }
 
     public static Vector2 LastPos
@@ -91,6 +105,16 @@ public class Stats
         set
         {
             lastPos = value;
+        }
+    }
+
+    public static Direction Facing
+    {
+        get
+        { return facing;  }
+        set
+        {
+            facing = value;
         }
     }
 
@@ -186,6 +210,18 @@ public class Stats
         get
         {
             return hpMultiplier;
+        }
+    }
+
+    public static bool Shield
+    {
+        get
+        {
+            return shield;
+        }
+        set
+        {
+            shield = value;
         }
     }
 

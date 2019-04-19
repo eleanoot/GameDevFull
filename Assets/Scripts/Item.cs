@@ -34,7 +34,6 @@ public abstract class Item : MonoBehaviour
     [SerializeField]
     protected ItemRarity rarity;
     
-    
     // Used to display the item description. 
     protected Text message;
 
@@ -66,6 +65,7 @@ public abstract class Item : MonoBehaviour
 
         // Remove the item from the pool so it can't show up again. 
         ItemManager.instance.RemoveFromPool(this);
+        SoundManager.instance.PlaySingle(SoundManager.instance.pickupSfx);
 
     }
 
@@ -77,7 +77,11 @@ public abstract class Item : MonoBehaviour
     // Only necessary for active items to implement, as passive items will always be active. 
     public virtual void OnUse()
     {
-        Debug.Log("default on use");
+        return;
+    }
+
+    public virtual void OnRoomClear()
+    {
         return;
     }
 
@@ -102,26 +106,30 @@ public abstract class Item : MonoBehaviour
 
     }
 
-    void OnTriggerEnter2D()
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
-        // Call the specific pickup action of this item. 
-        Pickup();
-        // Clear the flavourtext so it's not longer displayed.
-        if (message != null)
-            message.text = "";
-        // Destroy this picked up item. 
-        if (itemType == ItemType.Passive)
-            Destroy(gameObject);
-        // Remove all items from board so only one can be picked up. 
-        if (Stats.RoomCount % 5 == 0)
+        if (collision.gameObject.tag == "Player")
         {
-            GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
-
-            foreach (GameObject i in items)
+            // Call the specific pickup action of this item. 
+            Pickup();
+            // Clear the flavourtext so it's not longer displayed.
+            if (message != null)
+                message.text = "";
+            // Destroy this picked up item. 
+            if (itemType == ItemType.Passive)
+                Destroy(gameObject);
+            // Remove all items from board so only one can be picked up. 
+            if (Stats.RoomCount % 5 == 0)
             {
-                Destroy(i);
+                GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
+
+                foreach (GameObject i in items)
+                {
+                    Destroy(i);
+                }
             }
         }
+        
         
     }
     
