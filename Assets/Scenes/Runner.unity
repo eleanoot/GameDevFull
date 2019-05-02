@@ -319,7 +319,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1284158175}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -452,9 +452,10 @@ MonoBehaviour:
   - {fileID: 380887193885876306, guid: 90cdf104e7f70594d85899c4c70f1904, type: 3}
   - {fileID: 8995112957353295481, guid: 650419e5834f6a34f929ee23910f9648, type: 3}
   - {fileID: 5365443493169662527, guid: 8ec4d22eecdf0224f85d36d94ac4f958, type: 3}
-  - {fileID: 5365443493169662527, guid: 8ec4d22eecdf0224f85d36d94ac4f958, type: 3}
   - {fileID: 2356555772883275769, guid: 543dc5074c3af5142a3a1c3dbdc45f9b, type: 3}
   - {fileID: 1794659664558093423, guid: 2f08af3bb40789140852aada125ebe9a, type: 3}
+  - {fileID: 5410629437676831520, guid: 5ca0e9537d8cdae4e80318c1889269ae, type: 3}
+  - {fileID: 2824701795231901901, guid: 8506f0fa6f25b1e47896b0de169629e9, type: 3}
   decorationTiles:
   - {fileID: 11400000, guid: bc54c7bf6c04eb64088109fbf5c343a9, type: 2}
   - {fileID: 11400000, guid: 05d1e15b304b6ec40814eaabace7aa01, type: 2}
@@ -495,7 +496,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1284158175}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1097,7 +1098,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '` to show/hide debug console'
+  m_Text: = to show/hide debug console
 --- !u!222 &456983679
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3557,7 +3558,7 @@ RectTransform:
   m_Children:
   - {fileID: 302445307}
   m_Father: {fileID: 1284158175}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -3937,7 +3938,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1284158175}
-  m_RootOrder: 2
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4073,14 +4074,14 @@ RectTransform:
   m_Children:
   - {fileID: 406292781}
   - {fileID: 1508530229}
-  - {fileID: 1263747986}
   - {fileID: 2012166549}
   - {fileID: 243429813}
-  - {fileID: 1512543172}
   - {fileID: 299577952}
+  - {fileID: 1353765143}
+  - {fileID: 1263747986}
+  - {fileID: 1512543172}
   - {fileID: 1135559576}
   - {fileID: 1892687793}
-  - {fileID: 1353765143}
   - {fileID: 839602289}
   - {fileID: 456983677}
   - {fileID: 1029299740}
@@ -5240,7 +5241,7 @@ RectTransform:
   - {fileID: 736039351}
   - {fileID: 1997634008}
   m_Father: {fileID: 1284158175}
-  m_RootOrder: 9
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -5687,7 +5688,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1284158175}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5765,7 +5766,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c33196afc36081245bc7fb0f1fc25aaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownText: {fileID: 1029299738}
 --- !u!4 &1836235793
 Transform:
   m_ObjectHideFlags: 0
@@ -5812,7 +5812,7 @@ RectTransform:
   m_Children:
   - {fileID: 379118139}
   m_Father: {fileID: 1284158175}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -6083,7 +6083,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1284158175}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
