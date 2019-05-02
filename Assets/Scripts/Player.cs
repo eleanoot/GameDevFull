@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     // Booleans to check if we're currently transitioning and shouldn't be updating yet.
     public bool isMoving = false;
     public bool onCooldown = false;
+    public bool attackCooldown = false;
     
 
     // Reference to the animation controller for the player to change walking animation direction.
@@ -69,7 +70,7 @@ public class Player : MonoBehaviour
     private void LateUpdate()
     {
         // Do nothing if paused.
-        if (Time.timeScale == 0)
+        if (Time.timeScale == 0 || attackCooldown)
             return;
 
         // Use active item. 
@@ -84,19 +85,27 @@ public class Player : MonoBehaviour
         // Attack in any direction, not just the current one being faced. 
         if (Input.GetKeyDown("w"))
         {
+           
             Attack('w');
+            StartCoroutine(AttackCooldown(Stats.AttackSpeed));
         }
         else if (Input.GetKeyDown("a"))
         {
+            
             Attack('a');
+            StartCoroutine(AttackCooldown(Stats.AttackSpeed));
         }
         else if (Input.GetKeyDown("s"))
         {
+            
             Attack('s');
+            StartCoroutine(AttackCooldown(Stats.AttackSpeed));
         }
         else if (Input.GetKeyDown("d"))
         {
+           
             Attack('d');
+            StartCoroutine(AttackCooldown(Stats.AttackSpeed));
         }
     }
 
@@ -140,28 +149,66 @@ public class Player : MonoBehaviour
                 break;
         }
 
-        Vector2 startTile = transform.position;
-        Vector2 targetTile = startTile + new Vector2(xDir, yDir);
-        // Raycast to check if an enemy prefab is on this tile. Cast a line from the start point to the end point on the Units layer.
-        // Disable the boxCollider so that linecast doesn't hit this object's own collider.
-        //boxCollider.enabled = false;
-        // Set target tile for enemy spaces based on the player's current range.
-        Vector2 rangeTile = startTile + new Vector2(xDir * Stats.Range, yDir * Stats.Range);
-        RaycastHit2D hit = Physics2D.Linecast(startTile, rangeTile, unitsMask);
-        // Re-enable boxCollider after linecast
-        //boxCollider.enabled = true;
-        if (hit.transform != null && hit.transform.gameObject.tag == "Enemy")
+        if (Stats.Magic == null)
         {
-            // If the player is attacking from a distance, 'pounce' to a tile in front of the enemy. Otherwise just attack from where standing.  
-            if (Stats.Range > 1 && hit.distance >= 1.0)
+            Vector2 startTile = transform.position;
+            Vector2 targetTile = startTile + new Vector2(xDir, yDir);
+            // Raycast to check if an enemy prefab is on this tile. Cast a line from the start point to the end point on the Units layer.
+            // Disable the boxCollider so that linecast doesn't hit this object's own collider.
+            //boxCollider.enabled = false;
+            // Set target tile for enemy spaces based on the player's current range.
+            Vector2 rangeTile = startTile + new Vector2(xDir * Stats.Range, yDir * Stats.Range);
+            RaycastHit2D hit = Physics2D.Linecast(startTile, rangeTile, unitsMask);
+            // Re-enable boxCollider after linecast
+            //boxCollider.enabled = true;
+            if (hit.transform != null && hit.transform.gameObject.tag == "Enemy")
             {
-                StartCoroutine(SmoothMovement(rangeTile - new Vector2(xDir, yDir)));
-            }
-            hit.transform.gameObject.SendMessage("TakeDamage", Stats.Dmg);
-            
-        }
+                // If the player is attacking from a distance, 'pounce' to a tile in front of the enemy. Otherwise just attack from where standing.  
+                if (Stats.Range > 1 && hit.distance >= 1.0)
+                {
+                    StartCoroutine(SmoothMovement(rangeTile - new Vector2(xDir, yDir)));
+                }
+                hit.transform.gameObject.SendMessage("TakeDamage", Stats.Dmg);
 
-        SoundManager.instance.PlaySingle(scratchSfx);
+            }
+
+            SoundManager.instance.PlaySingle(scratchSfx);
+        }
+        else
+        {
+            float angle = Stats.MagicAngle;
+            
+            if (Stats.MagicTargets.Length > 1)
+            {
+                foreach (Vector2 n in Stats.MagicTargets)
+                {
+                    GameObject magicInst = Instantiate(Stats.Magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
+                    
+                    magicInst.GetComponent<Rigidbody2D>().AddForce(n * Stats.MagicSpeed);
+                    angle += 90f;
+                }
+            }
+            else
+            {
+                switch (Stats.Facing)
+                {
+                    case Stats.Direction.LEFT:
+                        angle = 180f;
+                        break;
+                    case Stats.Direction.DOWN:
+                        angle = 270f;
+                        break;
+                    case Stats.Direction.UP:
+                        angle = 90f;
+                        break;
+                    default:
+                        break;
+                }
+                GameObject magicInst = Instantiate(Stats.Magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
+                magicInst.GetComponent<Rigidbody2D>().AddForce(new Vector2(xDir, yDir) * Stats.MagicSpeed);
+            }
+
+        }
         
     }
 
@@ -240,7 +287,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Magic")
+        if (collision.gameObject.tag == "Magic" && !Stats.MagicShield)
         {
             StartCoroutine(IsHit());
         }
@@ -340,7 +387,18 @@ public class Player : MonoBehaviour
         }
         onCooldown = false;
     }
-    
+
+    private IEnumerator AttackCooldown(float cooldown)
+    {
+        attackCooldown = true;
+        while (cooldown > 0f)
+        {
+            cooldown -= Time.deltaTime;
+            yield return null;
+        }
+        attackCooldown = false;
+    }
+
     /* TILEMAP/MOVEMENT UTILS */
     // Determine if the given cell position is part of this tilemap or not.
     private TileBase getCell(Tilemap tilemap, Vector2 cellWorldPos)

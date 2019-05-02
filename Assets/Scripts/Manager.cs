@@ -22,10 +22,11 @@ public class Manager : MonoBehaviour
     private static Text multiplierText;
 
     private float countdownTime = 4.0f;
-    public Text countdownText;
+    private static Text countdownText;
 
     private static GameObject[] pauseObjects;
 
+    private bool restarting;
    
     // Keep a reference to the current timer running process to be able to stop and restart it between runs. 
     Coroutine timerCoroutine;
@@ -58,6 +59,7 @@ public class Manager : MonoBehaviour
 
         gameOverImage = GameObject.Find("GameOver");
         gameOverText = GameObject.Find("GameOverText").GetComponent<Text>();
+        countdownText = GameObject.Find("CountdownText").GetComponent<Text>();
         timerText = GameObject.Find("TimerText").GetComponent<Text>();
         scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
         multiplierText = GameObject.Find("ScoreMultiplier").GetComponent<Text>();
@@ -74,7 +76,7 @@ public class Manager : MonoBehaviour
         Stats.onScoreChangedCallback += UpdateScore;
         Stats.onMultiplierChangedCallback += UpdateMultiplier;
 
-
+        restarting = false;
     }
 
     // Start is called before the first frame update
@@ -106,19 +108,38 @@ public class Manager : MonoBehaviour
     IEnumerator levelTimer()
     {
         float counter = Stats.ChosenTime;
-
-        while (counter > 0)
+        if (counter > 0)
         {
-            counter -= Time.deltaTime;
+            while (counter > 0)
+            {
+                counter -= Time.deltaTime;
 
-            int minutes = Mathf.FloorToInt(counter / 60F);
-            int seconds = Mathf.FloorToInt(counter - minutes * 60);
-            string niceTime = string.Format("{0:0}:{1:00}", minutes, seconds);
+                int minutes = Mathf.FloorToInt(counter / 60F);
+                int seconds = Mathf.FloorToInt(counter - minutes * 60);
+                string niceTime = string.Format("{0:0}:{1:00}", minutes, seconds);
 
 
-            timerText.text = niceTime;
-            yield return null;
+                timerText.text = niceTime;
+                yield return null;
+            }
         }
+        else
+        {
+            // endless mode.
+            while(true)
+            {
+                counter += Time.deltaTime;
+                int minutes = Mathf.FloorToInt(counter / 60F);
+                int seconds = Mathf.FloorToInt(counter - minutes * 60);
+                string niceTime = string.Format("{0:0}:{1:00}", minutes, seconds);
+
+
+                timerText.text = niceTime;
+                yield return null;
+            }
+            
+        }
+        
 
         // When this coroutine finishes, the elapsed run time has passed and the game is over. 
         timerText.text = string.Format("{0:0}:{1:00}", 0, 0);
@@ -129,7 +150,7 @@ public class Manager : MonoBehaviour
     public void ResetTimer(float newTime)
     {
         StopCoroutine(timerCoroutine);
-       // levelTimeInSeconds = newTime;
+        Stats.ChosenTime = newTime;
         timerCoroutine = StartCoroutine(levelTimer());
     }
 
@@ -164,10 +185,20 @@ public class Manager : MonoBehaviour
         SceneManager.LoadScene("Runner");
         // Restart timer.
         ResetTimer(Stats.ChosenTime);
-        // Restart the background music. 
         SoundManager.instance.runSource.Stop();
-        SoundManager.instance.runSource.Play();
+        // Restart the background music. 
+        // StartCoroutine(DoCountdown());
+        restarting = true;
+        //SoundManager.instance.runSource.Play();
 
+    }
+
+    IEnumerator DoCountdown()
+    {
+        countdownTime = 4.0f;
+        Time.timeScale = 0;
+        yield return StartCoroutine(Countdown(Time.realtimeSinceStartup));
+        restarting = false;
     }
 
     private void Update()
@@ -226,7 +257,7 @@ public class Manager : MonoBehaviour
         homeButton.SetActive(true);
         if (isPlayerDead)
         {
-            gameOverText.text = "Maybe next time...\nYou cleared " + (Stats.RoomCount - 1) + " rooms\n" + "Final score: " + Stats.Score; ;
+            gameOverText.text = "Maybe next time...\nYou cleared " + Mathf.Max(Stats.RoomCount - 1, 0) + " rooms\n" + "Final score: " + Stats.Score; ;
         }
         else
         {
@@ -245,5 +276,25 @@ public class Manager : MonoBehaviour
     public int GetEnemyBonus()
     {
         return enemyKillBonus;
+    }
+
+    void OnEnable()
+    {
+        //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
+        SceneManager.sceneLoaded += OnLevelFinishedLoading;
+    }
+
+    void OnDisable()
+    {
+        //Tell our 'OnLevelFinishedLoading' function to stop listening for a scene change as soon as this script is disabled. Remember to always have an unsubscription for every delegate you subscribe to!
+        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+    }
+
+    void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+    {
+        if (restarting)
+        {
+            StartCoroutine(DoCountdown());
+        }
     }
 }

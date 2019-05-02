@@ -10,6 +10,7 @@ public class ClearRoom : MonoBehaviour
         // Reset everything from the tutorial before the return to the hub. 
         Stats.Reset();
         SoundManager.instance.tutorialSource.Stop();
+        SoundManager.instance.hubSource.Play();
         SceneManager.LoadScene("Hub");
     }
 }

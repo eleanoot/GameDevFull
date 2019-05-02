@@ -9,7 +9,7 @@ public class SoundManager : MonoBehaviour
     public AudioSource runSource; // Runner background music
     public AudioSource hubSource;
     public AudioSource tutorialSource;
-    public AudioSource efxSource; 
+    public AudioSource efxSource;
     public static SoundManager instance = null;
     public float lowPitchRange = .95f;              //The lowest a sound effect will be randomly pitched.
     public float highPitchRange = 1.05f;            //The highest a sound effect will be randomly pitched.

@@ -366,27 +366,27 @@ public class Room
     // subtract the maximum value. 
     public int ReduceNumber(int num, int max)
     {
-        //int result = num;
-        //do
-        //{
-        //    result %= max;
-        //} while (result >= max);
-
-
         int result = num;
         do
         {
-            int rhs = result % 10; // ones
-            int lhs = (result / 10) % 10; // tens
-
-            result = lhs + rhs;
-
-            if (result <= 10)
-            {
-                //result = Mathf.Abs(result - max);
-                result %= max;
-            }
+            result %= max;
         } while (result >= max);
+
+
+        //int result = num;
+        //do
+        //{
+        //    int rhs = result % 10; // ones
+        //    int lhs = (result / 10) % 10; // tens
+
+        //    result = lhs + rhs;
+
+        //    if (result <= 10)
+        //    {
+        //        //result = Mathf.Abs(result - max);
+        //        result %= max;
+        //    }
+        //} while (result >= max);
 
         return result;
     }

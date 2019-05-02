@@ -43,12 +43,14 @@ public class ConsoleController {
 	
 	
 	public ConsoleController() {
-		//When adding commands, you must add a call below to registerCommand() with its name, implementation method, and help text.
-		registerCommand("help", help, "Print this help.");
-		registerCommand("hide", hide, "Hide the console.");
+        //When adding commands, you must add a call below to registerCommand() with its name, implementation method, and help text.
         registerCommand("allitems", listAllItems, "List all the possible items to spawn.");
         registerCommand("allenemies", listAllEnemies, "List all the possible enemies to spawn.");
-		registerCommand("restart", restart, "Restart run.");
+        registerCommand("clear", clearRoom, "Clear the room of enemies.");
+        registerCommand("end", end, "End this run by losing all health.");
+        registerCommand("help", help, "Print this help.");
+		registerCommand("hide", hide, "Hide the console.");
+        registerCommand("restart", restart, "Restart run.");
         registerCommand("stats", printStats, "Prints the player's current stats.");
         registerCommand("settime", setTimer, "Set the run timer to the given value.");
         registerCommand("spawnitem", spawnItem, "Spawns the given item at the given position.");
@@ -224,7 +226,7 @@ public class ConsoleController {
             appendLogLine("Expected an integer for arg2.");
         }
         int y = 0;
-        if (!Int32.TryParse(args[1], out y))
+        if (!Int32.TryParse(args[2], out y))
         {
             appendLogLine("Expected an integer for arg3.");
         }
@@ -252,17 +254,32 @@ public class ConsoleController {
 
         switch (stat)
         {
+            case "range":
             case "Range": Stats.Range = value; break;
+            case "damage":
             case "Damage":
             case "Dmg": Stats.Dmg = value; break;
             case "HP":
             case "Health":
             case "hp":
             case "Hp": Stats.Heal(value); break;
+            case "speed":
             case "Speed": Stats.Speed = value / 10; break;
+            case "Charge":
+            case "charge": Stats.CurrentCharge = value; break;
             default:
                 appendLogLine("Error: stat not recognised"); break;
 
+        }
+    }
+
+    void clearRoom(string[] args)
+    {
+        GameObject[] enemies;
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject e in enemies)
+        {
+            e.gameObject.SendMessage("Defeat");
         }
     }
 
@@ -279,6 +296,11 @@ public class ConsoleController {
 			visibilityChanged(false);
 		}
 	}
+
+    void end(string[] args)
+    {
+        Stats.TakeDamage(Stats.MaxHp);
+    }
 	
 	
 	void restart(string[] args) {

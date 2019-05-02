@@ -50,12 +50,19 @@ public class Stats
 
     // the cooldown required between movements.
     private static float speed = 0.3f;
+    private static float attackSpeed = 0;
+
+    private static GameObject magic;
+    private static float magicSpeed;
+    private static float magicAngle;
+    private static Vector2Int[] magicTargets;
 
     // Each type of item the player has. 
     public static List<Item> passives = new List<Item>();
     public static Item active;
 
-    private static bool shield = false;
+    private static bool meleeShield = false;
+    private static bool magicShield = false;
 
     // Active item charge. Stored in here rather than in item to retain between rooms. 
     // The amount of charge this item needs to be used. 
@@ -78,6 +85,7 @@ public class Stats
         dmg = 0.5f;
         range = 1;
         speed = 0.3f;
+        attackSpeed = 0;
         score = 0;
         passives.Clear();
         // Remove active items kept for use and any on the board.
@@ -88,6 +96,9 @@ public class Stats
             GameObject.Destroy(i);
         }
         active = null;
+        magic = null;
+        magicSpeed = 0;
+        magicAngle = 0;
         roomCount = 0;
         itemRoomCount = 0;
         activeItemCharge = 0;
@@ -213,15 +224,77 @@ public class Stats
         }
     }
 
-    public static bool Shield
+    /* MAGIC */
+
+    public static bool MeleeShield
     {
         get
         {
-            return shield;
+            return meleeShield;
         }
         set
         {
-            shield = value;
+            meleeShield = value;
+        }
+    }
+
+    public static bool MagicShield
+    {
+        get
+        {
+            return magicShield;
+        }
+        set
+        {
+            magicShield = value;
+        }
+    }
+
+    public static Vector2Int[] MagicTargets
+    {
+        get
+        {
+            return magicTargets;
+        }
+        set
+        {
+            magicTargets = value;
+        }
+    }
+
+    public static float MagicAngle
+    {
+        get
+        {
+            return magicAngle;
+        }
+        set
+        {
+            magicAngle = value;
+        }
+    }
+
+    public static GameObject Magic
+    {
+        get
+        {
+            return magic;
+        }
+        set
+        {
+            magic = value;
+        }
+    }
+
+    public static float MagicSpeed
+    {
+        get
+        {
+            return magicSpeed;
+        }
+        set
+        {
+            magicSpeed = value;
         }
     }
 
@@ -305,6 +378,18 @@ public class Stats
         set
         {
             speed = value;
+        }
+    }
+
+    public static float AttackSpeed
+    {
+        get
+        {
+            return attackSpeed;
+        }
+        set
+        {
+            attackSpeed = value;
         }
     }
 

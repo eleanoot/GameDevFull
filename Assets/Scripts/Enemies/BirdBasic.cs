@@ -25,7 +25,7 @@ public class BirdBasic : Enemy
         
     }
 
-    private void Start()
+    private new void Start()
     {
         // The default prefab for this enemy faces right, so if generation put it on the other side of the grid, flip everything. 
         if (Stats.TransformToGrid(gameObject.transform.position).x == 7)
@@ -34,6 +34,7 @@ public class BirdBasic : Enemy
             attackTargets[0] = new Vector2Int(-1, 0);
             angle = 180f;
         }
+        base.Start();
             
     }
 

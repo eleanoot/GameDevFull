@@ -31,7 +31,7 @@ public class ConsoleView : MonoBehaviour {
 	
 	void Update() {
         // Toggle visibility when backquote key pressed
-        if (Input.GetKeyUp(KeyCode.BackQuote))
+        if (Input.GetKeyUp(KeyCode.Equals))
         {
             if (Time.timeScale == 1)
             {

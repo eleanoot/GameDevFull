@@ -23,7 +23,7 @@ public class BirdThree : Enemy
 
     }
 
-    private void Start()
+    private new void Start()
     {
         // The default prefab for this enemy faces right, so if generation put it on the other side of the grid, flip everything. 
         if (Stats.TransformToGrid(gameObject.transform.position).x == 7)
@@ -34,7 +34,7 @@ public class BirdThree : Enemy
             attackTargets[2] = new Vector2Int(-1, -1);
             angle = 135f;
         }
-
+        base.Start();
     }
 
     void Update()

@@ -44,7 +44,7 @@ public class FoxMageDark : Enemy
             // Only attack if the interval has elapsed and this enemy has not run out of HP. 
             if (attackTimer <= 0f && !defeated)
             {
-                float angle = 0f;
+                float angle = 45f;
                 foreach (Vector2 n in attackTargets)
                 {
                     GameObject magicInst = Instantiate(magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));

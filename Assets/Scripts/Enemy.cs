@@ -33,7 +33,7 @@ public abstract class Enemy : MonoBehaviour
     
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         rend = GetComponent<Renderer>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
@@ -55,6 +55,11 @@ public abstract class Enemy : MonoBehaviour
         target = newTarget;
     }
 
+    protected void Defeat()
+    {
+        TakeDamage((float)hp);
+    }
+
     // 'Flash' the sprite when attacked.
     private IEnumerator IsHit()
     {
@@ -71,7 +76,8 @@ public abstract class Enemy : MonoBehaviour
 
         if (hp <= 0)
         {
-            Stats.AddScore(Manager.instance.GetEnemyBonus());
+            if (Manager.instance != null)
+                Stats.AddScore(Manager.instance.GetEnemyBonus());
             Destroy(gameObject);
         }
             

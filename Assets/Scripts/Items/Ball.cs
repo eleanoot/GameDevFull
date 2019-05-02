@@ -18,6 +18,7 @@ public class Ball : Item
             Stats.CurrentCharge = 4;
             base.Pickup();
             gameObject.AddComponent<Rigidbody2D>();
+            gameObject.GetComponent<Rigidbody2D>().freezeRotation = true;
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -50,19 +51,66 @@ public class Ball : Item
         {
             gameObject.SetActive(false);
         }
-        else if (collision.gameObject.tag == "Player")
-        {
-            
-        }
         else if (collision.gameObject.tag == "Enemy")
         {
+            Vector2 targetTile;
+            Vector2 startTile;
+            RaycastHit2D hit;
+            Vector3 translation = Vector3.zero;
             if (Stats.Facing == Stats.Direction.LEFT || Stats.Facing == Stats.Direction.RIGHT)
             {
-                collision.gameObject.transform.Translate(new Vector3(0, 1, 0));
+                startTile = collision.gameObject.transform.position;
+                targetTile = startTile + new Vector2(0, 1);
+                hit = Physics2D.Linecast(startTile, targetTile);
+
+                if (!hit)
+                    translation = new Vector3(0, 1, 0);
+
+                targetTile = startTile + new Vector2(0, -1);
+                hit = Physics2D.Linecast(startTile, targetTile);
+
+                if (!hit)
+                {
+                    if (translation == Vector3.zero)
+                        translation = new Vector3(0, -1, 0);
+                    else if (RandomNumberGenerator.instance.Next() > 35)
+                    {
+                        translation = new Vector3(0, -1, 0);
+                    }
+                }
+                
+
+                if (translation != Vector3.zero)
+                    collision.gameObject.transform.Translate(translation);
+                else
+                    gameObject.SetActive(false);
             }
             else
             {
-                collision.gameObject.transform.Translate(new Vector3(1, 0, 0));
+                startTile = collision.gameObject.transform.position;
+                targetTile = startTile + new Vector2(1, 0);
+                hit = Physics2D.Linecast(startTile, targetTile);
+
+                if (!hit)
+                    translation = new Vector3(1, 0, 0);
+
+                targetTile = startTile + new Vector2(-1, 0);
+                hit = Physics2D.Linecast(startTile, targetTile);
+
+                if (!hit)
+                {
+                    if (translation == Vector3.zero)
+                        translation = new Vector3(-1, 0, 0);
+                    else if (RandomNumberGenerator.instance.Next() > 35)
+                    {
+                        translation = new Vector3(-1, 0, 0);
+                    }
+                }
+
+                Debug.Log(string.Format("translation {0}, {1}", translation.x, translation.y));
+
+                if (translation != Vector3.zero)
+                    collision.gameObject.transform.Translate(translation);
             }
         }
     }

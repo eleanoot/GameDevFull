@@ -9,15 +9,16 @@ public class Project : MonoBehaviour
     private Animator anim;
 
     private float damageDealt;
-    
+
+    public AudioClip sfx;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && !Stats.MagicShield)
         {
             Stats.TakeDamage(damageDealt);
         }
-        Destroy(gameObject); // TODO: save memory in full version by switching to object pooling and reuse the projectiles. 
+        Destroy(gameObject); 
 
     }
 
@@ -27,6 +28,7 @@ public class Project : MonoBehaviour
         anim = GetComponent<Animator>();
         // Ignore collisions with the enemy that spawned them. 
         Physics2D.IgnoreCollision(transform.parent.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+        SoundManager.instance.PlaySingle(sfx);
 ;    }
     
     void FixedUpdate()

@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Counter : Item
+public class MagicShield : Item
 {
-
-    // Keep hold of a reference to all the enemies for use in updating target later.
-    GameObject[] enemies;
     public GameObject magicEffect;
     public AudioClip useSfx;
 
@@ -28,7 +25,7 @@ public class Counter : Item
         {
             // Reset the current amount of charge.
             Stats.CurrentCharge = 0;
-            Stats.MeleeShield = true;
+            Stats.MagicShield = true;
             GameObject magicInst = Instantiate(magicEffect, FindObjectOfType<Player>().transform.position, Quaternion.identity);
             SoundManager.instance.PlaySingle(useSfx);
             magicInst.transform.SetParent(FindObjectOfType<Player>().transform);
@@ -38,6 +35,6 @@ public class Counter : Item
 
     public override void OnRoomClear()
     {
-        Stats.MeleeShield = false;
+        Stats.MagicShield = false;
     }
 }

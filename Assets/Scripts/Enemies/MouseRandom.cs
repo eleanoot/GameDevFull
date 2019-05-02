@@ -118,7 +118,7 @@ public class MouseRandom : Enemy
             {
                 target.gameObject.SendMessage("IsHit");
             }
-            else if (!Stats.Shield)
+            else if (!Stats.MeleeShield)
             {
                 if (Stats.TakeDamage(damageDealt))
                     StartCoroutine(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().IsHit()); // only flash the sprite if damage has actually been taken: prevent overlap of player being left invisible on final damage hit. 

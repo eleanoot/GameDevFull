@@ -28,6 +28,8 @@ public class SleepingCat : Enemy
 
     bool awakeState;
 
+    public AudioClip awake;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -64,11 +66,13 @@ public class SleepingCat : Enemy
     {
         if (!awakeState)
         {
+            
             // Check tiles around for the player. 
             if (PlayerNearby())
             {
                 anim.SetBool("awakeState", true);
                 awakeState = true;
+                SoundManager.instance.PlaySingle(awake);
             }
                 
         }
@@ -161,7 +165,7 @@ public class SleepingCat : Enemy
             {
                 target.gameObject.SendMessage("IsHit");
             }
-            else if (!Stats.Shield)
+            else if (!Stats.MeleeShield)
             {
                 if (Stats.TakeDamage(damageDealt))
                     StartCoroutine(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().IsHit()); // only flash the sprite if damage has actually been taken: prevent overlap of player being left invisible on final damage hit. 
