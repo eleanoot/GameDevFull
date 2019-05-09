@@ -49,6 +49,8 @@ MonoBehaviour:
   hp: 0.5
   damageDealt: 0.5
   edgeEnemy: 0
+  freezeInst: {fileID: 476820847703033079, guid: 62198810b5583e84fb729d46faec2457,
+    type: 3}
   movementTime: 0.15
   obstaclesTilemap: {fileID: 0}
   wallsTilemap: {fileID: 0}

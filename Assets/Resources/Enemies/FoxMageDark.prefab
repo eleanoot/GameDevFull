@@ -95,7 +95,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 2
   damageDealt: 0.5
-  magic: {fileID: 4975969554597251919, guid: 8bee251e57a14f44ead1f2f9a93cad7e, type: 3}
+  edgeEnemy: 0
+  freezeInst: {fileID: 476820847703033079, guid: 62198810b5583e84fb729d46faec2457,
+    type: 3}
   magicSpeed: 150
 --- !u!61 &1260946191953975748
 BoxCollider2D:

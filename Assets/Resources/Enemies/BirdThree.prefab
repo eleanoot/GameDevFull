@@ -49,7 +49,8 @@ MonoBehaviour:
   hp: 1
   damageDealt: 1
   edgeEnemy: 1
-  feather: {fileID: 270560464354402323, guid: 3fb02843545f735459ab4e20f7c14c4f, type: 3}
+  freezeInst: {fileID: 476820847703033079, guid: 62198810b5583e84fb729d46faec2457,
+    type: 3}
   featherSpeed: 500
 --- !u!212 &989264848306633261
 SpriteRenderer:

@@ -97,7 +97,8 @@ MonoBehaviour:
   hp: 1
   damageDealt: 1
   edgeEnemy: 1
-  feather: {fileID: 270560464354402323, guid: 3fb02843545f735459ab4e20f7c14c4f, type: 3}
+  freezeInst: {fileID: 476820847703033079, guid: 62198810b5583e84fb729d46faec2457,
+    type: 3}
   featherSpeed: 500
 --- !u!95 &5365443493169662520
 Animator:
@@ -142,5 +143,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.3358943, y: 0.32936227}
+  m_Size: {x: 0.28, y: 0.28}
   m_EdgeRadius: 0

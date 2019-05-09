@@ -97,12 +97,15 @@ MonoBehaviour:
   hp: 1.5
   damageDealt: 0.5
   edgeEnemy: 0
+  freezeInst: {fileID: 476820847703033079, guid: 62198810b5583e84fb729d46faec2457,
+    type: 3}
   movementTime: 0.15
   obstaclesTilemap: {fileID: 0}
   wallsTilemap: {fileID: 0}
   unitsMask:
     serializedVersion: 2
     m_Bits: 512
+  awake: {fileID: 8300000, guid: a78918315df75ef49b1603987385b2a1, type: 3}
 --- !u!95 &2356555772883275774
 Animator:
   serializedVersion: 3
