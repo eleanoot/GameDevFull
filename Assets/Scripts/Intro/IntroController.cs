@@ -58,9 +58,10 @@ public class IntroController : MonoBehaviour
         yield return new WaitForSeconds(6);
 
         endingText.CrossFadeAlpha(0.0f, 1.0f, false);
-
+        yield return StartCoroutine(FadeOut(SoundManager.instance.introSource, 2.0f));
         yield return new WaitForSeconds(1);
-
+       
+        SoundManager.instance.introSource.Stop();
         SceneManager.LoadScene("Title");
     }
 
@@ -76,7 +77,16 @@ public class IntroController : MonoBehaviour
         yield return new WaitForSeconds(1);
     }
 
-
+    IEnumerator FadeOut(AudioSource audioSource, float FadeTime)
+    {
+        float startVolume = audioSource.volume;
+        while (audioSource.volume > 0)
+        {
+            audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
+            yield return null;
+        }
+        audioSource.Stop();
+    }
 
 
 
@@ -86,6 +96,7 @@ public class IntroController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            SoundManager.instance.introSource.Stop();
             SceneManager.LoadScene("Title");
         }
     }

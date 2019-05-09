@@ -182,9 +182,17 @@ public class Player : MonoBehaviour
             {
                 foreach (Vector2 n in Stats.MagicTargets)
                 {
-                    GameObject magicInst = Instantiate(Stats.Magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
+                    //GameObject magicInst = Instantiate(Stats.Magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
+                    GameObject magicInst = ObjectPooler.instance.GetPooledObject(Stats.Magic.tag);
+                    if (magicInst != null)
+                    {
+                        magicInst.transform.position = gameObject.transform.position;
+                        magicInst.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                        magicInst.SetActive(true);
+                        magicInst.GetComponent<Rigidbody2D>().AddForce(n * Stats.MagicSpeed);
+                    }
                     
-                    magicInst.GetComponent<Rigidbody2D>().AddForce(n * Stats.MagicSpeed);
+                    //magicInst.GetComponent<Rigidbody2D>().AddForce(n * Stats.MagicSpeed);
                     angle += 90f;
                 }
             }
@@ -204,8 +212,16 @@ public class Player : MonoBehaviour
                     default:
                         break;
                 }
-                GameObject magicInst = Instantiate(Stats.Magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
-                magicInst.GetComponent<Rigidbody2D>().AddForce(new Vector2(xDir, yDir) * Stats.MagicSpeed);
+                //GameObject magicInst = Instantiate(Stats.Magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
+                //magicInst.GetComponent<Rigidbody2D>().AddForce(new Vector2(xDir, yDir) * Stats.MagicSpeed);
+                GameObject magicInst = ObjectPooler.instance.GetPooledObject(Stats.Magic.tag);
+                if (magicInst != null)
+                {
+                    magicInst.transform.position = gameObject.transform.position;
+                    magicInst.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                    magicInst.SetActive(true);
+                    magicInst.GetComponent<Rigidbody2D>().AddForce(new Vector2(xDir, yDir) * Stats.MagicSpeed);
+                }
             }
 
         }
@@ -287,7 +303,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Magic" && !Stats.MagicShield)
+        if ((collision.gameObject.tag == "Magic" || collision.gameObject.tag == "AirMagic" || collision.gameObject.tag == "TargetMagic") && !Stats.MagicShield)
         {
             StartCoroutine(IsHit());
         }
@@ -330,7 +346,7 @@ public class Player : MonoBehaviour
        
         // Coroutine has finished moving the player.
         isMoving = false;
-        SoundManager.instance.RandomizeSfx(steps1Sfx, steps2Sfx);
+        SoundManager.instance.RandomizeSfx(0.7f, steps1Sfx, steps2Sfx);
     }
 
     // Moves the player in the intended direction, then 'bounces' back to where they were. 

@@ -17,16 +17,21 @@ public class BasicProjectile : MonoBehaviour
         {
             Stats.TakeDamage(damageDealt);
         }
-        Destroy(gameObject); // TODO: save memory in full version by switching to object pooling and reuse the projectiles. 
+        //Destroy(gameObject); 
+        gameObject.SetActive(false);
 
     }
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         // Ignore collisions with the enemy that spawned them. 
-        Physics2D.IgnoreCollision(transform.parent.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-        SoundManager.instance.PlaySingle(sfx);
+        if (transform.parent != null)
+        {
+            Physics2D.IgnoreCollision(transform.parent.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+            SoundManager.instance.PlaySingle(sfx);
+        }
+            
     }
 
     public void SetDamage(float damage)

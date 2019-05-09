@@ -13,7 +13,7 @@ public class Curry : Item
         Stats.MagicSpeed = 200f;
         Stats.AttackSpeed = 0.3f;
         Stats.Dmg = 1.5f;
-        Mathf.Max(4, Stats.Range);
+        Stats.Range = Mathf.Max(4, Stats.Range);
         Stats.MagicTargets = magicTargets;
         base.Pickup();
     }

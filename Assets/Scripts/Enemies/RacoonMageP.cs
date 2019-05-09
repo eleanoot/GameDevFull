@@ -35,6 +35,12 @@ public class RacoonMageP : Enemy
 
     protected override void Attack()
     {
+        if (frozen)
+        {
+            if (Unfreeze())
+                return;
+
+        }
         if (attackTimer <= 0f)
             attackTimer = actionTime;
 
@@ -44,26 +50,50 @@ public class RacoonMageP : Enemy
             // Only attack if the interval time has elapsed and this enemy isn't at 0 health. 
             if (attackTimer <= 0f && !defeated)
             {
-               
-                GameObject magicInst = Instantiate(magic, transform.position, Quaternion.identity);
-                magicInst.transform.SetParent(transform);
-                Vector3 predic = new Vector3(0,0,0);
-                switch (Stats.Facing)
+
+                //GameObject magicInst = Instantiate(magic, transform.position, Quaternion.identity);
+                GameObject magicInst = ObjectPooler.instance.GetPooledObject("TargetMagic");
+                if (magicInst != null)
                 {
-                    case Stats.Direction.LEFT:
-                        predic = target.position - new Vector3(1,0,0); break;
-                    case Stats.Direction.RIGHT:
-                        predic = target.position + new Vector3(1, 0, 0); break;
-                    case Stats.Direction.UP:
-                        predic = target.position + new Vector3(0, 1, 0); break;
-                    case Stats.Direction.DOWN:
-                        predic = target.position - new Vector3(0, 1, 0); break;
+                    magicInst.transform.position = gameObject.transform.position;
+                    magicInst.transform.SetParent(transform);
+                    Vector3 predic = new Vector3(0, 0, 0);
+                    switch (Stats.Facing)
+                    {
+                        case Stats.Direction.LEFT:
+                            predic = target.position - new Vector3(1, 0, 0); break;
+                        case Stats.Direction.RIGHT:
+                            predic = target.position + new Vector3(1, 0, 0); break;
+                        case Stats.Direction.UP:
+                            predic = target.position + new Vector3(0, 1, 0); break;
+                        case Stats.Direction.DOWN:
+                            predic = target.position - new Vector3(0, 1, 0); break;
+                    }
+                    magicInst.GetComponent<TargetProjectile>().SetTarget(predic);
+                    Vector2 attackDir = predic - transform.position;
+                    // Apply the amount of health this enemy takes away to its projectile. 
+                    magicInst.GetComponent<TargetProjectile>().SetDamage(damageDealt);
+                    magicInst.SetActive(true);
+                    magicInst.GetComponent<Rigidbody2D>().AddForce(attackDir.normalized * magicSpeed);
                 }
-                magicInst.GetComponent<TargetProjectile>().SetTarget(predic);
-                Vector2 attackDir = predic - transform.position;
-                magicInst.GetComponent<Rigidbody2D>().AddForce(attackDir.normalized * magicSpeed);
-                // Apply the amount of health this enemy takes away to its projectile. 
-                magicInst.GetComponent<TargetProjectile>().SetDamage(damageDealt);
+                //magicInst.transform.SetParent(transform);
+                //Vector3 predic = new Vector3(0,0,0);
+                //switch (Stats.Facing)
+                //{
+                //    case Stats.Direction.LEFT:
+                //        predic = target.position - new Vector3(1,0,0); break;
+                //    case Stats.Direction.RIGHT:
+                //        predic = target.position + new Vector3(1, 0, 0); break;
+                //    case Stats.Direction.UP:
+                //        predic = target.position + new Vector3(0, 1, 0); break;
+                //    case Stats.Direction.DOWN:
+                //        predic = target.position - new Vector3(0, 1, 0); break;
+                //}
+                //magicInst.GetComponent<TargetProjectile>().SetTarget(predic);
+                //Vector2 attackDir = predic - transform.position;
+                //magicInst.GetComponent<Rigidbody2D>().AddForce(attackDir.normalized * magicSpeed);
+                //// Apply the amount of health this enemy takes away to its projectile. 
+                //magicInst.GetComponent<TargetProjectile>().SetDamage(damageDealt);
 
                 // Reset the interval timer.
                 attackTimer = 0f;

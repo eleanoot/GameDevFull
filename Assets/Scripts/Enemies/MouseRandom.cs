@@ -25,6 +25,17 @@ public class MouseRandom : Enemy
 
     protected override void Attack()
     {
+        if (frozen)
+        {
+            if (!Unfreeze())
+                anim.speed = 1f;
+            else
+            {
+                anim.speed = 0f;
+                return;
+            }
+
+        }
         if (attackTimer <= 0f)
             attackTimer = actionTime;
 

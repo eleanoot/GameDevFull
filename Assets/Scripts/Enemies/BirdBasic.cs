@@ -7,10 +7,13 @@ using UnityEngine;
 public class BirdBasic : Enemy
 {
     // A reference to the projectile object they use.
-    public GameObject feather;
+    //public GameObject feather;
     // How fast the projectiles travel. 
     public float featherSpeed;
     private float angle;
+
+    // Reference to the animator on this enemy for movement. 
+    private Animator anim;
 
     void Awake()
     {
@@ -22,7 +25,7 @@ public class BirdBasic : Enemy
         delayTime = (float)RandomNumberGenerator.instance.Next() / 100;
         delayTimer = delayTime;
         angle = 0f;
-        
+        anim = GetComponent<Animator>();
     }
 
     private new void Start()
@@ -51,6 +54,18 @@ public class BirdBasic : Enemy
 
     protected override void Attack()
     {
+        if (frozen)
+        {
+            if (!Unfreeze())
+                anim.speed = 1f;
+            else
+            {
+                anim.speed = 0f;
+                return;
+            }
+            
+        }
+
         if (attackTimer <= 0f)
             attackTimer = actionTime;
 
@@ -64,12 +79,23 @@ public class BirdBasic : Enemy
                 
                 foreach (Vector2 n in attackTargets)
                 {
-                    GameObject magicInst = Instantiate(feather, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
-                    magicInst.transform.SetParent(transform);
-                    magicInst.GetComponent<Rigidbody2D>().AddForce(n * featherSpeed);
-                    // Apply the amount of health this enemy takes away to its projectile. 
-                    magicInst.GetComponent<BasicProjectile>().SetDamage(damageDealt);
-                   
+                    //GameObject magicInst = Instantiate(feather, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
+                    //magicInst.transform.SetParent(transform);
+                    //magicInst.GetComponent<Rigidbody2D>().AddForce(n * featherSpeed);
+                    //// Apply the amount of health this enemy takes away to its projectile. 
+                    //magicInst.GetComponent<BasicProjectile>().SetDamage(damageDealt);
+
+                    GameObject magicInst = ObjectPooler.instance.GetPooledObject("AirMagic");
+                    if (magicInst != null)
+                    {
+                        magicInst.transform.position = gameObject.transform.position;
+                        magicInst.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                        magicInst.transform.SetParent(transform);
+                        magicInst.GetComponent<BasicProjectile>().SetDamage(damageDealt);
+                        magicInst.SetActive(true);
+                        magicInst.GetComponent<Rigidbody2D>().AddForce(n * featherSpeed);
+                    }
+
                 }
                 // Reset the interval timer.
                 attackTimer = 0f;

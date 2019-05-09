@@ -21,16 +21,20 @@ public abstract class Enemy : MonoBehaviour
     protected float delayTime;
     protected float attackTimer = 0f;
     protected float delayTimer = 0f;
+    protected float frozenTimer = 0f;
 
     // Reference to the sprite renderer to flash the sprite on hit. 
     protected Renderer rend;
 
     // Used to freeze the enemy from attacking when their HP is zero so the player can't be taken out by a technically defeated enemy unfairly. 
     protected bool defeated;
+    protected bool frozen;
 
     // Used to ensure an enemy that should be at the borders of the grid actually is. 
     public bool edgeEnemy;
-    
+
+    public GameObject freezeInst;
+    private GameObject f;
 
     // Start is called before the first frame update
     public void Start()
@@ -47,6 +51,21 @@ public abstract class Enemy : MonoBehaviour
     void TakeDamage(float dmg)
     {
         hp -= dmg;
+        // If the player has an effect on their attack, roll the dice to see if this takes effect.
+        // Currently just seeing if this enemy gets frozen. 
+        if (Stats.EffectChance > 0 && !frozen)
+        {
+            int result = Random.Range(1, 100);
+            if (result <= Stats.EffectChance)
+            {
+                frozen = true;
+                frozenTimer = 3.0f;
+                //freezeInst = ObjectPooler.instance.GetPooledObject("Effect");
+                //freezeInst.transform.position = gameObject.transform.position;
+                //freezeInst.SetActive(true);
+                f = Instantiate(freezeInst, transform.position, Quaternion.identity);
+            }
+        }
         StartCoroutine(IsHit());
     }
 
@@ -58,6 +77,19 @@ public abstract class Enemy : MonoBehaviour
     protected void Defeat()
     {
         TakeDamage((float)hp);
+    }
+
+    protected bool Unfreeze()
+    {
+        frozenTimer -= Time.deltaTime;
+        if (frozenTimer <= 0.0f)
+        {
+            frozen = false;
+            //freezeInst.SetActive(false);
+            //freezeInst = null;
+            Destroy(f);
+        }
+        return frozen;
     }
 
     // 'Flash' the sprite when attacked.
@@ -78,6 +110,12 @@ public abstract class Enemy : MonoBehaviour
         {
             if (Manager.instance != null)
                 Stats.AddScore(Manager.instance.GetEnemyBonus());
+            if (freezeInst != null)
+            {
+                //freezeInst.SetActive(false);
+                //freezeInst = null;
+                Destroy(f);
+            }
             Destroy(gameObject);
         }
             

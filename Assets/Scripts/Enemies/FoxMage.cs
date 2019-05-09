@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class FoxMage : Enemy
 {
-    // A reference to the projectile object they use.
-    public GameObject magic;
     // How fast the projectiles travel. 
     public float magicSpeed;
     
@@ -37,6 +35,12 @@ public class FoxMage : Enemy
 
     protected override void Attack()
     {
+        if (frozen)
+        {
+            if (Unfreeze())
+                return;
+
+        }
         if (attackTimer <= 0f)
             attackTimer = actionTime;
 
@@ -50,11 +54,23 @@ public class FoxMage : Enemy
                 float angle = 0f;
                 foreach (Vector2 n in attackTargets)
                 {
-                    GameObject magicInst = Instantiate(magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
-                    magicInst.transform.SetParent(transform);
-                    magicInst.GetComponent<Rigidbody2D>().AddForce(n * magicSpeed);
-                    // Apply the amount of health this enemy takes away to its projectile. 
-                    magicInst.GetComponent<Project>().SetDamage(damageDealt);
+
+                    GameObject magicInst = ObjectPooler.instance.GetPooledObject("Magic");
+                    if (magicInst != null)
+                    {
+                        magicInst.transform.position = gameObject.transform.position;
+                        magicInst.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                        magicInst.transform.SetParent(transform);
+                        magicInst.GetComponent<Project>().SetDamage(damageDealt);
+                        magicInst.SetActive(true);
+                        magicInst.GetComponent<Rigidbody2D>().AddForce(n * magicSpeed);
+                    }
+
+                    //GameObject magicInst = Instantiate(magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
+                    //magicInst.transform.SetParent(transform);
+                    //magicInst.GetComponent<Rigidbody2D>().AddForce(n * magicSpeed);
+                    //// Apply the amount of health this enemy takes away to its projectile. 
+                    //magicInst.GetComponent<Project>().SetDamage(damageDealt);
                     angle += 90f;
                 }
                 // Reset the interval timer.

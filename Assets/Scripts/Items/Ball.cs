@@ -9,6 +9,8 @@ public class Ball : Item
     GameObject[] enemies;
     GameObject pos;
     float moveTime = 0.1f;
+    public AudioClip sfx;
+
     protected override void Pickup()
     {
         // Only pick up this item if not already owned by the player- prevent accidental pickup when used in a room. 
@@ -171,6 +173,7 @@ public class Ball : Item
 
             gameObject.transform.position = pos.transform.position;
             gameObject.SetActive(true);
+            SoundManager.instance.PlaySingle(sfx);
 
             StartCoroutine(SmoothMovement(end));
         }

@@ -32,7 +32,7 @@ public class CameraShift : MonoBehaviour
             Stats.AddScore(50 * (Stats.ItemRoomCount + 1));
             // Add a score bonus based on the amount of health the player has on room clear.
             Stats.AddScore((int)(Stats.Hp * 30));
-            if (Stats.PreviousHp == Stats.Hp)
+            if (Stats.PreviousHp == Stats.Hp && Stats.RoomCount % 5 != 0)
                 Stats.IncrementMultiplier(0.5f);
             else
             {
@@ -51,18 +51,8 @@ public class CameraShift : MonoBehaviour
 
     private void SwitchRoom()
     {
+        Stats.RoomCount++;
         SceneManager.LoadScene("Runner");
     }
-
-    //private void Update()
-    //{
-    //    if (PollVC)
-    //    {
-    //        if (!Cinemachine.CinemachineCore.Instance.IsLive(virtualCamera.GetComponent<Cinemachine.CinemachineVirtualCamera>()))
-    //        {
-    //            SceneManager.LoadScene("Runner");
-    //        }
-    //    }
-        
-    //}
+    
 }

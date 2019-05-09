@@ -64,6 +64,18 @@ public class SleepingCat : Enemy
     // Attack: chases after the player. Cannot go back into sleeping state. 
     protected override void Attack()
     {
+        if (frozen)
+        {
+            if (!Unfreeze())
+                anim.speed = 1f;
+            else
+            {
+                anim.speed = 0f;
+                return;
+            }
+
+        }
+
         if (!awakeState)
         {
             
@@ -198,7 +210,7 @@ public class SleepingCat : Enemy
             yield return null;
         }
 
-        // If the mouse and the player somehow ended up on the same square at the same time after this move, move the mouse back one. 
+        // If the cat and the player somehow ended up on the same square at the same time after this move, move the cat back one. 
         if (Stats.TransformToGrid(target.transform.position) == Stats.TransformToGrid(transform.position))
         {
             StartCoroutine(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().IsHit());
@@ -207,7 +219,7 @@ public class SleepingCat : Enemy
             StartCoroutine(SmoothMovement(targetTile));
         }
 
-        // If this mouse ended up on the same position as another mouse after this move, push it back. 
+        // If this cat ended up on the same position as another enemy after this move, push it back. 
         this.GetComponent<BoxCollider2D>().enabled = false;
         RaycastHit2D hit = Physics2D.Linecast(transform.position, transform.position, unitsMask);
         this.GetComponent<BoxCollider2D>().enabled = true;

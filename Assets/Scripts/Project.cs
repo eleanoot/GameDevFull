@@ -10,7 +10,9 @@ public class Project : MonoBehaviour
 
     private float damageDealt;
 
-    public AudioClip sfx;
+    //public AudioClip sfx;
+    public AudioClip fireball1;
+    public AudioClip fireball2;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -18,17 +20,22 @@ public class Project : MonoBehaviour
         {
             Stats.TakeDamage(damageDealt);
         }
-        Destroy(gameObject); 
-
+        //Destroy(gameObject); 
+        gameObject.transform.parent = null;
+        gameObject.SetActive(false);
     }
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         anim = GetComponent<Animator>();
         // Ignore collisions with the enemy that spawned them. 
-        Physics2D.IgnoreCollision(transform.parent.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-        SoundManager.instance.PlaySingle(sfx);
+        if (transform.parent != null)
+        {
+            Physics2D.IgnoreCollision(transform.parent.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+            SoundManager.instance.RandomizeSfx(0.3f, fireball1, fireball2);
+        }
+            
 ;    }
     
     void FixedUpdate()
@@ -36,7 +43,9 @@ public class Project : MonoBehaviour
         // When the projectile has travelled this many tiles away from the enemy, destroy it.
         if (Vector3.Distance(transform.parent.position, transform.position) > 2)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            gameObject.transform.parent = null;
+            gameObject.SetActive(false);
         }
         // Halfway through travel reduce to a smaller sprite for 'fading out'.
         else if (Vector3.Distance(transform.parent.position, transform.position) > 1)

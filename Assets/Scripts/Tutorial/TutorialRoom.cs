@@ -6,7 +6,7 @@ public class TutorialRoom : MonoBehaviour
 {
     public GameObject virtualCamera;
     public GameObject enemies;
-    public GameObject ui; 
+    public GameObject ui;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -24,7 +24,6 @@ public class TutorialRoom : MonoBehaviour
             enemies.SetActive(true);
             ui.SetActive(true);
             virtualCamera.SetActive(true);
-            
             Stats.RoomCount++;
         }
         
@@ -35,9 +34,16 @@ public class TutorialRoom : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             enemies.SetActive(false);
+            // Clear any projectiles on the screen to prevent freezing them there. 
+            Project[] projectiles = FindObjectsOfType<Project>();
+            foreach (Project p in projectiles)
+            {
+                //Destroy(p.gameObject);
+                gameObject.transform.SetParent(null);
+                gameObject.SetActive(false);
+            }
             ui.SetActive(false);
             virtualCamera.SetActive(false);
-            
             
         }
     }

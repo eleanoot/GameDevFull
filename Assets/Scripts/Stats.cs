@@ -24,7 +24,7 @@ public class Stats
     private static Vector2 lastPos = new Vector2(0.5f, -4.5f);
 
     // Count the number of ALL rooms the player's passed through.
-    private static int roomCount = 0;
+    private static int roomCount = 1;
     // Count the number of ITEM rooms the player's passed through. Used for enemy number scaling. 
     private static int itemRoomCount = 0;
     // the total possible number of heart containers the player can have
@@ -63,6 +63,7 @@ public class Stats
 
     private static bool meleeShield = false;
     private static bool magicShield = false;
+    private static int effectChance = 0;
 
     // Active item charge. Stored in here rather than in item to retain between rooms. 
     // The amount of charge this item needs to be used. 
@@ -99,7 +100,8 @@ public class Stats
         magic = null;
         magicSpeed = 0;
         magicAngle = 0;
-        roomCount = 0;
+        effectChance = 0;
+        roomCount = 1;
         itemRoomCount = 0;
         activeItemCharge = 0;
         currentCharge = 0;
@@ -296,6 +298,19 @@ public class Stats
         {
             magicSpeed = value;
         }
+    }
+
+    public static int EffectChance
+    {
+        get
+        {
+            return effectChance;
+        }
+        set
+        {
+            effectChance = value;
+        }
+
     }
 
     public static void IncrementMultiplier(float value)

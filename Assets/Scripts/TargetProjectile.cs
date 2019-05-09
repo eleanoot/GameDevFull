@@ -11,15 +11,20 @@ public class TargetProjectile : MonoBehaviour
     public AudioClip sfx;
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         // Ignore collisions with the enemy that spawned them. 
-        Physics2D.IgnoreCollision(transform.parent.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+        if (transform.parent != null)
+        {
+            Physics2D.IgnoreCollision(transform.parent.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+            SoundManager.instance.PlaySingle(sfx);
+        }
+            
         //var dir = target.position - transform.position;
         var dir = target - transform.position;
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        SoundManager.instance.PlaySingle(sfx);
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -32,8 +37,8 @@ public class TargetProjectile : MonoBehaviour
         //{
         //    target.gameObject.SendMessage("IsHit");
         //}
-        Destroy(gameObject); // TODO: save memory in full version by switching to object pooling and reuse the projectiles. 
-
+        //Destroy(gameObject); 
+        gameObject.SetActive(false);
     }
 
     public void SetTarget(Vector3 t)

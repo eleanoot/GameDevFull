@@ -16,6 +16,7 @@ public class TitleScreen : MonoBehaviour
 
     private void Start()
     {
+        SoundManager.instance.hubSource.Play();
         StartCoroutine(FadeIn());
     }
 

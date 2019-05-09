@@ -50,7 +50,6 @@ public class RoomGeneration : MonoBehaviour
 
         // Increment the room count and display it in the GUI.
         roomText = GameObject.Find("RoomText").GetComponent<Text>();
-        Stats.RoomCount++;
         roomText.text = "Room " + Stats.RoomCount;
 
         // Keep the previous values from room clear displayed. 

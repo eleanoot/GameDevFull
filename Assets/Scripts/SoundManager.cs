@@ -10,6 +10,7 @@ public class SoundManager : MonoBehaviour
     public AudioSource hubSource;
     public AudioSource tutorialSource;
     public AudioSource efxSource;
+    public AudioSource introSource;
     public static SoundManager instance = null;
     public float lowPitchRange = .95f;              //The lowest a sound effect will be randomly pitched.
     public float highPitchRange = 1.05f;            //The highest a sound effect will be randomly pitched.
@@ -33,7 +34,7 @@ public class SoundManager : MonoBehaviour
     public void PlaySingle(AudioClip clip)
     {
         //Set the clip of our efxSource audio source to the clip passed in as a parameter.
-        efxSource.clip = clip;
+       // efxSource.clip = clip;
         //Choose a random pitch to play back our clip at between our high and low pitch ranges.
         float randomPitch = Random.Range(lowPitchRange, highPitchRange);
 
@@ -41,11 +42,12 @@ public class SoundManager : MonoBehaviour
         efxSource.pitch = randomPitch;
 
         //Play the clip.
-        efxSource.Play();
+        //efxSource.Play();
+        efxSource.PlayOneShot(clip, 1);
     }
 
     //RandomizeSfx chooses randomly between various audio clips and slightly changes their pitch.
-    public void RandomizeSfx(params AudioClip[] clips)
+    public void RandomizeSfx(float volumeScale, params AudioClip[] clips)
     {
         //Generate a random number between 0 and the length of our array of clips passed in.
         int randomIndex = Random.Range(0, clips.Length);
@@ -60,7 +62,8 @@ public class SoundManager : MonoBehaviour
         efxSource.clip = clips[randomIndex];
 
         //Play the clip.
-        efxSource.Play();
+        //efxSource.Play();
+        efxSource.PlayOneShot(efxSource.clip, volumeScale);
     }
 
 }

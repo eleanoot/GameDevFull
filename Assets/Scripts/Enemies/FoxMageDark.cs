@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class FoxMageDark : Enemy
 {
-    // The projectile this enemy uses. 
-    public GameObject magic;
     // How fast the projectile travel. 
     public float magicSpeed;
 
@@ -35,6 +33,12 @@ public class FoxMageDark : Enemy
 
     protected override void Attack()
     {
+        if (frozen)
+        {
+            if (Unfreeze())
+                return;
+
+        }
         if (attackTimer <= 0f)
             attackTimer = actionTime;
 
@@ -47,11 +51,21 @@ public class FoxMageDark : Enemy
                 float angle = 45f;
                 foreach (Vector2 n in attackTargets)
                 {
-                    GameObject magicInst = Instantiate(magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
-                    magicInst.transform.SetParent(transform);
-                    magicInst.GetComponent<Rigidbody2D>().AddForce(n * magicSpeed);
-                    // Apply the damage this enemy does to the projectiles it fires. 
-                    magicInst.GetComponent<Project>().SetDamage(damageDealt);
+                    GameObject magicInst = ObjectPooler.instance.GetPooledObject("Magic");
+                    if (magicInst != null)
+                    {
+                        magicInst.transform.position = gameObject.transform.position;
+                        magicInst.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                        magicInst.transform.SetParent(transform);
+                        magicInst.GetComponent<Project>().SetDamage(damageDealt);
+                        magicInst.SetActive(true);
+                        magicInst.GetComponent<Rigidbody2D>().AddForce(n * magicSpeed);
+                    }
+                    //GameObject magicInst = Instantiate(magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
+                    //magicInst.transform.SetParent(transform);
+                    //magicInst.GetComponent<Rigidbody2D>().AddForce(n * magicSpeed);
+                    //// Apply the damage this enemy does to the projectiles it fires. 
+                    //magicInst.GetComponent<Project>().SetDamage(damageDealt);
                     angle += 90f;
                 }
 

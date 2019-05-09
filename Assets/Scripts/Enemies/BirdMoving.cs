@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BirdMoving : Enemy
 {
-    // A reference to the projectile object they use.
-    public GameObject feather;
+    // The interval between the enemy making a move. 
+    public float movementTime;
     // How fast the projectiles travel. 
     public float featherSpeed;
     private float angle;
@@ -67,9 +67,16 @@ public class BirdMoving : Enemy
                 {
                     // Choose a random row and move to it. 
                     int randomRow = RandomNumberGenerator.instance.Next();
-                    int newY = randomRow % 10; 
+                    int newY;
+                    do
+                    {
+                        newY = (randomRow / 10) % 10;
+                    } while (newY == Stats.TransformToGrid(transform.position).y);
                     
-                    isMoving = false;
+                    
+                    StartCoroutine(SmoothMovement(new Vector2(transform.position.x, newY - 4 + 0.5f)));
+                    
+                    
                 }
                 else
                 {
@@ -78,13 +85,20 @@ public class BirdMoving : Enemy
 
                     foreach (Vector2 n in attackTargets)
                     {
-                        GameObject magicInst = Instantiate(feather, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
-                        magicInst.transform.SetParent(transform);
-                        magicInst.GetComponent<Rigidbody2D>().AddForce(n * featherSpeed);
-                        // Apply the amount of health this enemy takes away to its projectile. 
-                        magicInst.GetComponent<BasicProjectile>().SetDamage(damageDealt);
+                        GameObject magicInst = ObjectPooler.instance.GetPooledObject("AirMagic");
+                        if (magicInst != null)
+                        {
+                            magicInst.transform.position = gameObject.transform.position;
+                            magicInst.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                            magicInst.transform.SetParent(transform);
+                            magicInst.GetComponent<BasicProjectile>().SetDamage(damageDealt);
+                            magicInst.SetActive(true);
+                            magicInst.GetComponent<Rigidbody2D>().AddForce(n * featherSpeed);
+                        }
 
                     }
+
+                    isMoving = true;
                 }
 
 
@@ -95,7 +109,26 @@ public class BirdMoving : Enemy
         }
 
     }
-    
+
+    private IEnumerator SmoothMovement(Vector3 end)
+    {
+        Vector2 originalPos = transform.position;
+        float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
+        float inverseMoveTime = 1 / movementTime;
+
+        while (sqrRemainingDistance > float.Epsilon)
+        {
+            Vector3 newPos = Vector3.MoveTowards(transform.position, end, inverseMoveTime * Time.deltaTime);
+            transform.position = newPos;
+            sqrRemainingDistance = (transform.position - end).sqrMagnitude;
+
+            // Wait until the next frame to continue execution. 
+            yield return null;
+        }
+        isMoving = false;
+
+    }
+
 
     public override Vector2Int[] GetAttackTargets()
     {

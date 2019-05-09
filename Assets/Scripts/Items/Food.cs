@@ -10,5 +10,6 @@ public class Food : Item
     {
         // Edit the player's health. 
         Stats.Heal(1);
+        SoundManager.instance.PlaySingle(SoundManager.instance.pickupSfx);
     }
 }
