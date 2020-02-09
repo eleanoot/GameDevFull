@@ -51,7 +51,6 @@ public class Room
         }
 
         // Enemy number scaling based on a y = 3^x graph, where x is the number of item rooms passed through.
-        // Will eventually take into account the chance to spawn a harder variant of an enemy when more are added. 
         // 0 and 1 item room(s) set manually due to the graph used giving them both the same very small value in this context.
         if (Stats.ItemRoomCount == 0)
         {
@@ -215,7 +214,24 @@ public class Room
                 sizeIndex = ReduceNumber(sizeIndex, possibleSizes.Length);
 
             Vector2Int regionSize = possibleSizes[sizeIndex];
-            List<Vector2Int> region = FindFreeRegion(regionSize);
+            List<Vector2Int> region;
+            int attemptCount = 0;
+            bool valid = true;
+            do
+            {
+                attemptCount++;
+                region = FindFreeRegion(regionSize);
+                foreach (Vector2Int coord in region)
+                {
+                    if (elementsPerRow[coord.y] == MAX_ROW_AMOUNT)
+                    {
+                        valid = false;
+                        break;
+                    }
+
+                }
+            } while (!valid && attemptCount < 20);
+
             foreach (Vector2Int coord in region)
             {
                 if (this.population[coord.x, coord.y] == "")
@@ -224,8 +240,11 @@ public class Room
                     // Update the number of elements on this row.
                     elementsPerRow[coord.y]++;
                 }
-               
+
             }
+
+
+            
         }
     }
 
@@ -247,12 +266,7 @@ public class Room
             }
         }
     }
-
-    // Determine if this region is right next to the previously used region to try and space out elements. 
-    //public bool CloseRegion(Vector2Int region, Vector2Int lastPos)
-    //{
-    //    return (region.x + 1 == lastPos.x || region.x - 1 == lastPos.x || region.y + 1 == lastPos.y || region.y - 1 == lastPos.y);
-    //}
+    
 
     public bool CloseRegion(Vector2Int region)
     {
@@ -272,23 +286,37 @@ public class Room
         return tooClose;
     }
 
+    public bool AttackBoxedIn(Enemy e, Vector2Int region)
+    {
+        int boxedCount = 0;
+        foreach (Vector2Int t in e.GetAttackTargets())
+        {
+            Vector2Int test = region + t;
+            if (this.population[test.x, test.y] != "")
+                boxedCount++;
+        }
+
+        return boxedCount == 4 ? true : false;
+    }
+
     // Choose and place enemies until the grid is filled. 
     public void PopulateEnemies(GameObject[] possiblePrefabs)
     {
         int noOfEnemies = RandomNumberGenerator.instance.Next();
-
         // Reduce the given random number into one below the maximum number of enemies allowed for this room. 
         while (noOfEnemies > enemyNumCap)
         {
-            noOfEnemies -= enemyNumCap;
+            // noOfEnemies -= enemyNumCap;
+            noOfEnemies = ReduceNumber(noOfEnemies, enemyNumCap);
+           // Debug.Log(string.Format("reduced to {0}", noOfEnemies));
         }
-        if (noOfEnemies < 3)
+        if (noOfEnemies < 4)
         {
             noOfEnemies = 4; // A minimum number of enemies on the level.
+           // Debug.Log(string.Format("hard set to {0}", noOfEnemies));
         }
+       // Debug.Log(string.Format("no of enemies: {0}", noOfEnemies));
         int rowsFilled = 0;
-        // Keep a reference to where the last enemy was placed to try and space them out. Initially set to a point nowhere near the grid for use in a loop.
-        //Vector2Int lastEnemy = new Vector2Int(-10, -10);
         // Keep placing enemies until one of the stop conditions has been met for the grid being too full. 
         int count = 0;
         do
@@ -304,13 +332,13 @@ public class Room
             
             List<Vector2Int> region;
             // Repeat finding a position for this enemy until it's on a valid row and not close to the last enemy placed 
-            // - attempt to spread them across the board. Try ten times before placing enemy in the last found position. 
+            // - attempt to spread them across the board. Try 20 times before placing enemy in the last found position. 
             int attemptCount = 0;
             do
             {
                 attemptCount++;
                 region = FindFreeRegion(new Vector2Int(1, 1), enemyDetails);
-            } while (elementsPerRow[region[0].y] == MAX_ROW_AMOUNT || CloseRegion(region[0]) && attemptCount < 10);
+            } while (elementsPerRow[region[0].y] == MAX_ROW_AMOUNT || CloseRegion(region[0]) && AttackBoxedIn(enemyDetails, region[0]) && attemptCount < 20);
 
             if (this.population[region[0].x, region[0].y] == "")
             {
@@ -319,8 +347,7 @@ public class Room
                 elementsPerRow[region[0].y]++;
                 if (elementsPerRow[region[0].y] >= MAX_ROW_AMOUNT)
                     rowsFilled++;
-
-                //lastEnemy = region[0];
+                
                 enemyPositions[count] = region[0];
             }
 
@@ -371,22 +398,6 @@ public class Room
         {
             result %= max;
         } while (result >= max);
-
-
-        //int result = num;
-        //do
-        //{
-        //    int rhs = result % 10; // ones
-        //    int lhs = (result / 10) % 10; // tens
-
-        //    result = lhs + rhs;
-
-        //    if (result <= 10)
-        //    {
-        //        //result = Mathf.Abs(result - max);
-        //        result %= max;
-        //    }
-        //} while (result >= max);
 
         return result;
     }

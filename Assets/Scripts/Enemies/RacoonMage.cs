@@ -49,13 +49,6 @@ public class RacoonMage : Enemy
             if (attackTimer <= 0f && !defeated)
             {
                 Vector2 attackDir = target.position - transform.position;
-                //GameObject magicInst = Instantiate(magic, transform.position, Quaternion.identity);
-                //magicInst.transform.SetParent(transform);
-                //magicInst.GetComponent<TargetProjectile>().SetTarget(target.position);
-                //magicInst.GetComponent<Rigidbody2D>().AddForce(attackDir.normalized * magicSpeed);
-                //// Apply the amount of health this enemy takes away to its projectile. 
-                //magicInst.GetComponent<TargetProjectile>().SetDamage(damageDealt);
-
                 GameObject magicInst = ObjectPooler.instance.GetPooledObject("TargetMagic");
                 if (magicInst != null)
                 {

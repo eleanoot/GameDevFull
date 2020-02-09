@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Script to activate the objects in this tutorial room when needed and transition between them. 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,7 +39,6 @@ public class TutorialRoom : MonoBehaviour
             Project[] projectiles = FindObjectsOfType<Project>();
             foreach (Project p in projectiles)
             {
-                //Destroy(p.gameObject);
                 gameObject.transform.SetParent(null);
                 gameObject.SetActive(false);
             }

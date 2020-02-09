@@ -12,6 +12,8 @@ public class ItemManager : MonoBehaviour
 
     public GameObject[] allItems; // the actual item prefabs to be instantiated.
 
+    public Item defaultItem;
+
     // Manage UI elements for all items in one central place.
     public Text flavourText;
 
@@ -94,6 +96,24 @@ public class ItemManager : MonoBehaviour
         }
     }
 
+    public void AddToPool(Item item)
+    {
+        switch (item.Rarity)
+        {
+            case ((Item.ItemRarity)0):
+                commonPool.Add(item);
+                break;
+            case ((Item.ItemRarity)1):
+                rarePool.Add(item);
+                break;
+            case ((Item.ItemRarity)2):
+                legendaryPool.Add(item);
+                break;
+            default:
+                break;
+        }
+    }
+
     public void RemoveFromPool(Item item)
     {
         int itemIndex;
@@ -137,24 +157,36 @@ public class ItemManager : MonoBehaviour
         // Randomly choose an item from the respective pool.
         int nextItemIndex = RandomNumberGenerator.instance.Next();
         Item nextItem = null; 
-        // TODO: Eventually if an item pool is depleted, a default item will be spawned instead e.g. a HP up. 
-        // For now however the demo placeholders will not be removed from the pools on pickup, so they will never empty.
         switch(rarity)
         {
             case Item.ItemRarity.Common:
-                if (nextItemIndex >= commonPool.Count)
+                if (commonPool.Count == 0)
+                    nextItem = defaultItem;
+                else if (nextItemIndex >= commonPool.Count)
+                {
                     nextItemIndex = ReduceNumber(nextItemIndex, commonPool.Count);
-                nextItem = commonPool[nextItemIndex];
+                    nextItem = commonPool[nextItemIndex];
+                }
+                    
                 break;
             case Item.ItemRarity.Rare:
-                if (nextItemIndex >= rarePool.Count)
+                if (rarePool.Count == 0)
+                    nextItem = defaultItem;
+                else if (nextItemIndex >= rarePool.Count)
+                {
                     nextItemIndex = ReduceNumber(nextItemIndex, rarePool.Count);
-                nextItem = rarePool[nextItemIndex];
+                    nextItem = rarePool[nextItemIndex];
+                }
                 break;
             case Item.ItemRarity.Legendary:
-                if (nextItemIndex >= legendaryPool.Count)
+                if (legendaryPool.Count == 0)
+                    nextItem = defaultItem;
+                else if (nextItemIndex >= legendaryPool.Count)
+                {
                     nextItemIndex = ReduceNumber(nextItemIndex, legendaryPool.Count);
-                nextItem = legendaryPool[nextItemIndex];
+                    nextItem = legendaryPool[nextItemIndex];
+                }
+                    
                 break;
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Projectiles fired by the player. 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +18,6 @@ public class PlayerMagic : MonoBehaviour
         {
             collision.gameObject.SendMessage("TakeDamage", Stats.Dmg);
         }
-        //Destroy(gameObject); 
         gameObject.SetActive(false);
     }
 
@@ -35,7 +35,6 @@ public class PlayerMagic : MonoBehaviour
     private void Update()
     {
         if (transform.position.y > 4)
-            //Destroy(gameObject);
             gameObject.SetActive(false);
 
     }
@@ -45,7 +44,6 @@ public class PlayerMagic : MonoBehaviour
         // When the projectile has travelled this many tiles away from the player, destroy it.
         if (Vector3.Distance(startPos, transform.position) > Stats.Range)
         {
-            //Destroy(gameObject);
             gameObject.SetActive(false);
         }
 

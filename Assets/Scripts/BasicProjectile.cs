@@ -17,12 +17,11 @@ public class BasicProjectile : MonoBehaviour
         {
             Stats.TakeDamage(damageDealt);
         }
-        //Destroy(gameObject); 
         gameObject.SetActive(false);
 
     }
 
-    // Start is called before the first frame update
+    // OnEnable to run every time this instance is used from the pool.
     void OnEnable()
     {
         // Ignore collisions with the enemy that spawned them. 

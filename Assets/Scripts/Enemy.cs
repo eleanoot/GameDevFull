@@ -60,10 +60,8 @@ public abstract class Enemy : MonoBehaviour
             {
                 frozen = true;
                 frozenTimer = 3.0f;
-                //freezeInst = ObjectPooler.instance.GetPooledObject("Effect");
-                //freezeInst.transform.position = gameObject.transform.position;
-                //freezeInst.SetActive(true);
-                f = Instantiate(freezeInst, transform.position, Quaternion.identity);
+                SoundManager.instance.PlaySingle(SoundManager.instance.freezeClip);
+                f = Instantiate(freezeInst, transform.position, Quaternion.AngleAxis(90, Vector3.forward));
             }
         }
         StartCoroutine(IsHit());
@@ -85,8 +83,6 @@ public abstract class Enemy : MonoBehaviour
         if (frozenTimer <= 0.0f)
         {
             frozen = false;
-            //freezeInst.SetActive(false);
-            //freezeInst = null;
             Destroy(f);
         }
         return frozen;
@@ -112,8 +108,6 @@ public abstract class Enemy : MonoBehaviour
                 Stats.AddScore(Manager.instance.GetEnemyBonus());
             if (freezeInst != null)
             {
-                //freezeInst.SetActive(false);
-                //freezeInst = null;
                 Destroy(f);
             }
             Destroy(gameObject);

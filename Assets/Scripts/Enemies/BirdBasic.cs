@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class BirdBasic : Enemy
 {
-    // A reference to the projectile object they use.
-    //public GameObject feather;
     // How fast the projectiles travel. 
     public float featherSpeed;
     private float angle;
@@ -79,12 +77,6 @@ public class BirdBasic : Enemy
                 
                 foreach (Vector2 n in attackTargets)
                 {
-                    //GameObject magicInst = Instantiate(feather, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
-                    //magicInst.transform.SetParent(transform);
-                    //magicInst.GetComponent<Rigidbody2D>().AddForce(n * featherSpeed);
-                    //// Apply the amount of health this enemy takes away to its projectile. 
-                    //magicInst.GetComponent<BasicProjectile>().SetDamage(damageDealt);
-
                     GameObject magicInst = ObjectPooler.instance.GetPooledObject("AirMagic");
                     if (magicInst != null)
                     {

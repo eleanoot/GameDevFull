@@ -30,7 +30,7 @@ public class ConsoleView : MonoBehaviour {
 	}
 	
 	void Update() {
-        // Toggle visibility when backquote key pressed
+        // Toggle visibility when equals key pressed and pause the game to enter commands.
         if (Input.GetKeyUp(KeyCode.Equals))
         {
             if (Time.timeScale == 1)

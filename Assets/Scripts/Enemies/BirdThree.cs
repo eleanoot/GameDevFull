@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Enemy that stands still on the grid and fires magic across the screen in 3 directions.
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -75,12 +76,6 @@ public class BirdThree : Enemy
                 float currentAngle = angle;
                 foreach (Vector2 n in attackTargets)
                 {
-                    //GameObject magicInst = Instantiate(feather, transform.position, Quaternion.AngleAxis(currentAngle, Vector3.forward));
-                    //magicInst.transform.SetParent(transform);
-                    //magicInst.GetComponent<Rigidbody2D>().AddForce(n * featherSpeed);
-                    //// Apply the amount of health this enemy takes away to its projectile. 
-                    //magicInst.GetComponent<BasicProjectile>().SetDamage(damageDealt);
-
                     GameObject magicInst = ObjectPooler.instance.GetPooledObject("AirMagic");
                     if (magicInst != null)
                     {

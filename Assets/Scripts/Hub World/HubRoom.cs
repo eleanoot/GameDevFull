@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Activate and deactive the virtual camera to slide between rooms in the hub world.
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

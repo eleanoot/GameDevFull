@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Show the title screen text and start the game. 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,7 @@ public class TitleScreen : MonoBehaviour
 
     private void Awake()
     {
+        // Set everything to transparent to fade it in. 
         canvas.alpha = 0.0f;
     }
 
@@ -23,6 +25,7 @@ public class TitleScreen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // On any key pressed, start the game.
         if (Input.anyKey)
         {
             SoundManager.instance.PlaySingle(startSfx);

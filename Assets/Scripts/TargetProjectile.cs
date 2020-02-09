@@ -1,11 +1,11 @@
-﻿using System.Collections;
+﻿// Projectiles that aim towards a target.
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TargetProjectile : MonoBehaviour
 {
     private float damageDealt;
-   // private Transform target;
     private Vector3 target;
 
     public AudioClip sfx;
@@ -20,7 +20,6 @@ public class TargetProjectile : MonoBehaviour
             SoundManager.instance.PlaySingle(sfx);
         }
             
-        //var dir = target.position - transform.position;
         var dir = target - transform.position;
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -33,11 +32,6 @@ public class TargetProjectile : MonoBehaviour
         {
             Stats.TakeDamage(damageDealt);
         }
-        //else if (collision.gameObject.tag == "Item")
-        //{
-        //    target.gameObject.SendMessage("IsHit");
-        //}
-        //Destroy(gameObject); 
         gameObject.SetActive(false);
     }
 

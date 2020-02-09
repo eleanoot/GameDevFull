@@ -154,13 +154,9 @@ public class Player : MonoBehaviour
             Vector2 startTile = transform.position;
             Vector2 targetTile = startTile + new Vector2(xDir, yDir);
             // Raycast to check if an enemy prefab is on this tile. Cast a line from the start point to the end point on the Units layer.
-            // Disable the boxCollider so that linecast doesn't hit this object's own collider.
-            //boxCollider.enabled = false;
             // Set target tile for enemy spaces based on the player's current range.
             Vector2 rangeTile = startTile + new Vector2(xDir * Stats.Range, yDir * Stats.Range);
             RaycastHit2D hit = Physics2D.Linecast(startTile, rangeTile, unitsMask);
-            // Re-enable boxCollider after linecast
-            //boxCollider.enabled = true;
             if (hit.transform != null && hit.transform.gameObject.tag == "Enemy")
             {
                 // If the player is attacking from a distance, 'pounce' to a tile in front of the enemy. Otherwise just attack from where standing.  
@@ -182,7 +178,6 @@ public class Player : MonoBehaviour
             {
                 foreach (Vector2 n in Stats.MagicTargets)
                 {
-                    //GameObject magicInst = Instantiate(Stats.Magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
                     GameObject magicInst = ObjectPooler.instance.GetPooledObject(Stats.Magic.tag);
                     if (magicInst != null)
                     {
@@ -192,7 +187,6 @@ public class Player : MonoBehaviour
                         magicInst.GetComponent<Rigidbody2D>().AddForce(n * Stats.MagicSpeed);
                     }
                     
-                    //magicInst.GetComponent<Rigidbody2D>().AddForce(n * Stats.MagicSpeed);
                     angle += 90f;
                 }
             }
@@ -212,8 +206,6 @@ public class Player : MonoBehaviour
                     default:
                         break;
                 }
-                //GameObject magicInst = Instantiate(Stats.Magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
-                //magicInst.GetComponent<Rigidbody2D>().AddForce(new Vector2(xDir, yDir) * Stats.MagicSpeed);
                 GameObject magicInst = ObjectPooler.instance.GetPooledObject(Stats.Magic.tag);
                 if (magicInst != null)
                 {
@@ -272,13 +264,7 @@ public class Player : MonoBehaviour
         bool hasWall = getCell(wallsTilemap, targetTile) != null;
 
         // Raycast to check if an enemy prefab is on this tile. Cast a line from the start point to the end point on the Units layer.
-        //Disable the boxCollider so that linecast doesn't hit this object's own collider.
-        //boxCollider.enabled = false;
-        // Set target tile for enemy spaces.
-        //Vector2 rangeTile = startTile + new Vector2(xDir * Stats.Range, yDir * Stats.Range);
         RaycastHit2D hit = Physics2D.Linecast(startTile, targetTile, unitsMask);
-        //Re-enable boxCollider after linecast
-        //boxCollider.enabled = true;
 
         // If trying to move onto the same tile as an enemy that isn't at 0 hp, take a bit of damage. 
         if (hit.transform != null && hit.transform.gameObject.tag == "Enemy" && !hit.transform.gameObject.GetComponent<Enemy>().IsDefeated())
@@ -314,6 +300,7 @@ public class Player : MonoBehaviour
     // 'Flash' the sprite when attacked.
     public IEnumerator IsHit()
     {
+        Stats.isInvulnerable = true;
         SoundManager.instance.PlaySingle(hurtSfx);
         for (int i = 0; i < 5; i++)
         {
@@ -323,6 +310,7 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         rend.enabled = true;
+        Stats.isInvulnerable = false;
     }
 
 
@@ -391,7 +379,7 @@ public class Player : MonoBehaviour
 
         isMoving = false;
     }
-
+    
     // Introduce a delay between actions.
     private IEnumerator ActionCooldown(float cooldown)
     {

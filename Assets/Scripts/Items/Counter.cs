@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Shield against melee attacks for the room (enemies that try and run into you).
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class Counter : Item
 
     // Keep hold of a reference to all the enemies for use in updating target later.
     GameObject[] enemies;
+    // The effect displayed on use.
     public GameObject magicEffect;
     public AudioClip useSfx;
 

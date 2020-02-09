@@ -138,6 +138,10 @@ public class ConsoleController {
         appendLogLine(string.Format("Damage: {0}", Stats.Dmg));
         appendLogLine(string.Format("Range: {0}", Stats.Range));
         appendLogLine(string.Format("Speed: {0}", Stats.Speed));
+        appendLogLine(string.Format("Attack Speed: {0}", Stats.AttackSpeed));
+        appendLogLine(string.Format("Magic Speed: {0}", Stats.MagicSpeed));
+        appendLogLine(string.Format("Magic Angle: {0}", Stats.MagicAngle));
+        appendLogLine(string.Format("Effect Chance: {0}", Stats.EffectChance));
     }
 
     void setTimer(string[] args)
@@ -204,6 +208,14 @@ public class ConsoleController {
         appendLogLine("FoxMage");
         appendLogLine("FoxMageDark");
         appendLogLine("MouseBasic");
+        appendLogLine("MouseRandom");
+        appendLogLine("SleepingDog");
+        appendLogLine("SleepingCat");
+        appendLogLine("BirdBasic");
+        appendLogLine("BirdThree");
+        appendLogLine("BirdMoving");
+        appendLogLine("RacoonMage");
+        appendLogLine("RacoonMageP");
 
     }
 

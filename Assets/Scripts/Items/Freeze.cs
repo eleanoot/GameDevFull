@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Give the player's attack a chance to freeze enemies.
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

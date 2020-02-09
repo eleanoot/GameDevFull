@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486f0cdec53c8e042bfedd02ec5259da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startSfx: {fileID: 8300000, guid: df51fd8b5ca450a4089537acdae1d4a6, type: 3}
+  startSfx: {fileID: 8300000, guid: cd5de3224cbc0214f84fc80534e1748f, type: 3}
   canvas: {fileID: 793528222}
   bg: {fileID: 1547652525}
 --- !u!4 &83324314
@@ -528,7 +528,7 @@ RectTransform:
   m_GameObject: {fileID: 1547652518}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 100}
-  m_LocalScale: {x: 0.036101084, y: 0.036101084, z: 0.036101084}
+  m_LocalScale: {x: 0.02173913, y: 0.02173913, z: 0.02173913}
   m_Children: []
   m_Father: {fileID: 1579932073}
   m_RootOrder: 0
@@ -536,7 +536,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 791.99994, y: 0}
+  m_SizeDelta: {x: 1189.9999, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1547652524
 MonoBehaviour:

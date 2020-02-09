@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿// Enemy that moves up and down the side of the grid to fire projectiles. 
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -66,10 +68,12 @@ public class BirdMoving : Enemy
                 if (isMoving)
                 {
                     // Choose a random row and move to it. 
-                    int randomRow = RandomNumberGenerator.instance.Next();
+                    int randomRow; 
                     int newY;
+                    // Repeat finding a new row until it's a different one to prevent just staying still.
                     do
                     {
+                        randomRow = RandomNumberGenerator.instance.Next();
                         newY = (randomRow / 10) % 10;
                     } while (newY == Stats.TransformToGrid(transform.position).y);
                     
@@ -110,6 +114,18 @@ public class BirdMoving : Enemy
 
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+            Debug.Log("oops");
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //if (collision.gameObject.tag == "Player")
+            Debug.Log("oops");
+    }
+
     private IEnumerator SmoothMovement(Vector3 end)
     {
         Vector2 originalPos = transform.position;
@@ -122,12 +138,19 @@ public class BirdMoving : Enemy
             transform.position = newPos;
             sqrRemainingDistance = (transform.position - end).sqrMagnitude;
 
+            if (Stats.TransformToGrid(GameObject.FindGameObjectWithTag("Player").transform.position) == Stats.TransformToGrid(transform.position))
+            {
+                Stats.TakeDamage(damageDealt);
+                StartCoroutine(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().IsHit());
+            }
+
             // Wait until the next frame to continue execution. 
             yield return null;
         }
         isMoving = false;
 
     }
+    
 
 
     public override Vector2Int[] GetAttackTargets()

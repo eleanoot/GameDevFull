@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Runs the opening cutscene of images to show the story. 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ public class IntroController : MonoBehaviour
 
     private void Awake()
     {
+        // Set all images to be completely transparent to fade them in for display. 
         foreach (Image i in images)
         {
             i.canvasRenderer.SetAlpha(0.0f);
@@ -22,6 +24,7 @@ public class IntroController : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        // Fade in the first 3 images. 
         yield return StartCoroutine(DoSlowFadeIn(0));
         yield return StartCoroutine(DoSlowFadeIn(1));
         yield return StartCoroutine(DoSlowFadeIn(2));
@@ -33,6 +36,7 @@ public class IntroController : MonoBehaviour
 
         yield return new WaitForSeconds(2);
 
+        // Next image set.
         yield return StartCoroutine(DoFastFadeIn(3));
         yield return StartCoroutine(DoFastFadeIn(4));
         yield return StartCoroutine(DoFastFadeIn(5));
@@ -45,6 +49,7 @@ public class IntroController : MonoBehaviour
 
         yield return new WaitForSeconds(2);
 
+        // Large image.
         yield return StartCoroutine(DoSlowFadeIn(6));
 
         yield return new WaitForSeconds(3);
@@ -58,6 +63,8 @@ public class IntroController : MonoBehaviour
         yield return new WaitForSeconds(6);
 
         endingText.CrossFadeAlpha(0.0f, 1.0f, false);
+
+        // Fade out the background music for a nice transition into the title music. 
         yield return StartCoroutine(FadeOut(SoundManager.instance.introSource, 2.0f));
         yield return new WaitForSeconds(1);
        

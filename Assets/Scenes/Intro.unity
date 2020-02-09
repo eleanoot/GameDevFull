@@ -882,6 +882,7 @@ MonoBehaviour:
   lowPitchRange: 0.95
   highPitchRange: 1.05
   pickupSfx: {fileID: 8300000, guid: df51fd8b5ca450a4089537acdae1d4a6, type: 3}
+  freezeClip: {fileID: 8300000, guid: d45d79d7b7e3d214e81959d38685abbe, type: 3}
 --- !u!82 &570463223
 AudioSource:
   m_ObjectHideFlags: 0

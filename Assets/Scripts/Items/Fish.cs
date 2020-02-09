@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Replace the player's attack with fireballs that move in the cardinal directions. 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

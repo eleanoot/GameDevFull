@@ -119,7 +119,7 @@ public class SleepingCat : Enemy
 
         
     }
-
+    // Check if the player is within one tile in any direction. 
     private bool PlayerNearby()
     {
         Vector2Int playerPos = Stats.TransformToGrid(target.transform.position);

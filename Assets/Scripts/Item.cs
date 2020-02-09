@@ -45,8 +45,11 @@ public abstract class Item : MonoBehaviour
         if (itemType == ItemType.Active)
         {
             if (Stats.active != null)
+            {
                 // Manually undo the DontDestroyOnLoad of the current active item. 
                 Destroy(Stats.ActiveItem.gameObject);
+            }
+               
 
             gameObject.SetActive(false);
             // Remove the text displays to prevent them from triggering on pickup since this item will be sticking around. 

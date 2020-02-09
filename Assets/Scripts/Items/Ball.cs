@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Active item, send along a row or column to push enemies out of the way. 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -48,7 +49,7 @@ public class Ball : Item
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        // Destroy on hit of an obstacle. 
         if (collision.gameObject.tag == "Obstacles")
         {
             gameObject.SetActive(false);
@@ -59,8 +60,14 @@ public class Ball : Item
             Vector2 startTile;
             RaycastHit2D hit;
             Vector3 translation = Vector3.zero;
+            // For this enemy, determine which tiles either side of it are free. 
+            // If only one is free, knock it to that tile. 
+            // If both are free, randomise which to move it to. 
+            // If neither are free, don't move. 
+            // Sending along a row.
             if (Stats.Facing == Stats.Direction.LEFT || Stats.Facing == Stats.Direction.RIGHT)
             {
+               
                 startTile = collision.gameObject.transform.position;
                 targetTile = startTile + new Vector2(0, 1);
                 hit = Physics2D.Linecast(startTile, targetTile);
@@ -81,12 +88,13 @@ public class Ball : Item
                     }
                 }
                 
-
+                // If a movement was found, translate the enemy there.
                 if (translation != Vector3.zero)
                     collision.gameObject.transform.Translate(translation);
                 else
                     gameObject.SetActive(false);
             }
+            // Sending along a column. 
             else
             {
                 startTile = collision.gameObject.transform.position;
@@ -109,40 +117,15 @@ public class Ball : Item
                     }
                 }
 
-                Debug.Log(string.Format("translation {0}, {1}", translation.x, translation.y));
 
                 if (translation != Vector3.zero)
                     collision.gameObject.transform.Translate(translation);
+                else
+                    gameObject.SetActive(false);
             }
         }
     }
 
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.tag == "Obstacles")
-    //    {
-    //        gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-    //        gameObject.SetActive(false);
-    //    }
-    //    else if (collision.gameObject.tag == "Enemy")
-    //    {
-            
-
-
-    //        collision.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-    //        // Push it one way right now. 
-    //        if (Stats.Facing == Stats.Direction.LEFT || Stats.Facing == Stats.Direction.RIGHT)
-    //        {
-    //            collision.gameObject.transform.Translate(new Vector3(0, 1, 0));
-    //        }
-    //        else
-    //        {
-    //            collision.gameObject.transform.Translate(new Vector3(1, 0, 0));
-    //        }
-    //        collision.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-    //    }
-           
-    //}
 
     public override void OnUse()
     {
@@ -150,10 +133,11 @@ public class Ball : Item
         {
             // Reset the current amount of charge.
             Stats.CurrentCharge = 0;
-
+            // Find the enemies and player for referencing this item's journey. 
             enemies = GameObject.FindGameObjectsWithTag("Enemy");
             pos = GameObject.FindGameObjectWithTag("Player");
 
+            // Send the item across the full length of the grid from here. 
             Vector3 end = Vector3.zero;
             switch (Stats.Facing)
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Manages the player's stats and room information. 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,7 @@ public class Stats
     private static Direction facing;
 
     private static float chosenTime;
-    // Used to match up the 
+    
     private static Vector2 lastPos = new Vector2(0.5f, -4.5f);
 
     // Count the number of ALL rooms the player's passed through.
@@ -52,6 +53,7 @@ public class Stats
     private static float speed = 0.3f;
     private static float attackSpeed = 0;
 
+    // Information for if the player has a magic attack.
     private static GameObject magic;
     private static float magicSpeed;
     private static float magicAngle;
@@ -61,8 +63,10 @@ public class Stats
     public static List<Item> passives = new List<Item>();
     public static Item active;
 
+    // Attack shields.
     private static bool meleeShield = false;
     private static bool magicShield = false;
+
     private static int effectChance = 0;
 
     // Active item charge. Stored in here rather than in item to retain between rooms. 
@@ -337,6 +341,7 @@ public class Stats
             hp -= dmg;
             ClampHealth();
             IncrementMultiplier(0);
+            // Only die if we're not in the tutorial!
             if (hp <= 0 && SceneManager.GetActiveScene().name != "Tutorial")
             {
                 Manager.instance.GameOver(true);

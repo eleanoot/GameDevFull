@@ -8,8 +8,6 @@ using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour
 {
-    // The default amount of time the game lets you progress for. Will eventually be pickable. 
-   // private float DEFAULT_TIME = 90f;
     public static Manager instance = null;
 
     // UI to display the game over.
@@ -24,6 +22,7 @@ public class Manager : MonoBehaviour
     private float countdownTime = 4.0f;
     private static Text countdownText;
 
+    // Objects that make up the pause menu to be shown on the pause screen.
     private static GameObject[] pauseObjects;
 
     private bool restarting;
@@ -68,9 +67,6 @@ public class Manager : MonoBehaviour
         // Prevent the UI assignment being reset.
         restartButton.GetComponent<Button>().onClick.AddListener(instance.RestartGame);
         homeButton.GetComponent<Button>().onClick.AddListener(instance.ReturnHome);
-        //gameOverImage.SetActive(false);
-        //restartButton.SetActive(false);
-        //homeButton.SetActive(false);
         pauseObjects = GameObject.FindGameObjectsWithTag("ShowOnPause");
         hidePaused();
         Stats.onScoreChangedCallback += UpdateScore;
@@ -90,6 +86,7 @@ public class Manager : MonoBehaviour
         yield return StartCoroutine(Countdown(Time.realtimeSinceStartup));
     }
 
+    // Run the countdown before starting a run. 
     IEnumerator Countdown(float start)
     {
         while (countdownTime > 0)
@@ -108,6 +105,7 @@ public class Manager : MonoBehaviour
     IEnumerator levelTimer()
     {
         float counter = Stats.ChosenTime;
+        // Decrementing the timer. 
         if (counter > 0)
         {
             while (counter > 0)
@@ -125,7 +123,7 @@ public class Manager : MonoBehaviour
         }
         else
         {
-            // endless mode.
+            // Endless mode. Will never end by itself, and just keep adding onto the timer.
             while(true)
             {
                 counter += Time.deltaTime;
@@ -159,8 +157,10 @@ public class Manager : MonoBehaviour
         scoreText.text = "Score: " + Stats.Score;
     }
 
+    // Update the multiplier for no damage taken.
     public void UpdateMultiplier()
     {
+        // Multiplier lost. 
         if (Stats.HpMultiplier == 1.0f)
         {
             multiplierText.text = "";
@@ -186,10 +186,7 @@ public class Manager : MonoBehaviour
         // Restart timer.
         ResetTimer(Stats.ChosenTime);
         SoundManager.instance.runSource.Stop();
-        // Restart the background music. 
-        // StartCoroutine(DoCountdown());
         restarting = true;
-        //SoundManager.instance.runSource.Play();
 
     }
 
@@ -216,6 +213,16 @@ public class Manager : MonoBehaviour
                 hidePaused();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.RightBracket))
+        {
+            GameObject[] enemies;
+            enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (GameObject e in enemies)
+            {
+                e.gameObject.SendMessage("Defeat");
+            }
+        }
     }
 
     public void showPaused()
@@ -235,6 +242,7 @@ public class Manager : MonoBehaviour
         }
     }
 
+    // Perform necessary cleanup to return to the hub screen.
     public void ReturnHome()
     {
         Stats.Reset();
@@ -268,6 +276,7 @@ public class Manager : MonoBehaviour
         
     }
 
+    // Calculate the bonus gotten from killing enemies in this current room. 
     public void CalculateEnemyBonus(int noOfEnemies)
     {
         enemyKillBonus = Mathf.FloorToInt(Mathf.Ceil(Mathf.Pow(noOfEnemies, 0.2f) * 15));
@@ -286,10 +295,11 @@ public class Manager : MonoBehaviour
 
     void OnDisable()
     {
-        //Tell our 'OnLevelFinishedLoading' function to stop listening for a scene change as soon as this script is disabled. Remember to always have an unsubscription for every delegate you subscribe to!
+        //Tell our 'OnLevelFinishedLoading' function to stop listening for a scene change as soon as this script is disabled. 
         SceneManager.sceneLoaded -= OnLevelFinishedLoading;
     }
 
+    // When this scene is reloaded, only start the countdown again if it's resetting to a totally new run.
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
         if (restarting)

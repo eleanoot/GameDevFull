@@ -71,14 +71,21 @@ public class RoomGeneration : MonoBehaviour
         else
         {
             GameObject[] chosenItems = new GameObject[3];
+            int attemptCount;
             for (int i = 0; i < 3; ++i)
             {
+                attemptCount = 0;
                 Item nextItem;
                 // Continue to roll this item until it is different from all the others rolled so far.
                 do
                 {
                     nextItem = ItemManager.instance.RollItem();
+                    attemptCount++;
+                    if (attemptCount > 10)
+                        break;
                 } while (chosenItems[0] == nextItem.gameObject || chosenItems[1] == nextItem.gameObject);
+                if (attemptCount == 10)
+                    nextItem = ItemManager.instance.defaultItem;
                 chosenItems[i] = nextItem.gameObject;
             }
             this.currentRoom.PopulateItems(chosenItems);

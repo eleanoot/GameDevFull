@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Transition the virtual camera to the dummy room to indicate room completion and apply bonuses. 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -52,6 +53,7 @@ public class CameraShift : MonoBehaviour
     private void SwitchRoom()
     {
         Stats.RoomCount++;
+        Input.ResetInputAxes();
         SceneManager.LoadScene("Runner");
     }
     

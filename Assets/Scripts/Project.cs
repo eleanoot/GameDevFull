@@ -9,8 +9,7 @@ public class Project : MonoBehaviour
     private Animator anim;
 
     private float damageDealt;
-
-    //public AudioClip sfx;
+    
     public AudioClip fireball1;
     public AudioClip fireball2;
 
@@ -20,7 +19,7 @@ public class Project : MonoBehaviour
         {
             Stats.TakeDamage(damageDealt);
         }
-        //Destroy(gameObject); 
+        
         gameObject.transform.parent = null;
         gameObject.SetActive(false);
     }
@@ -43,7 +42,6 @@ public class Project : MonoBehaviour
         // When the projectile has travelled this many tiles away from the enemy, destroy it.
         if (Vector3.Distance(transform.parent.position, transform.position) > 2)
         {
-            //Destroy(gameObject);
             gameObject.transform.parent = null;
             gameObject.SetActive(false);
         }

@@ -76,24 +76,6 @@ public class RacoonMageP : Enemy
                     magicInst.SetActive(true);
                     magicInst.GetComponent<Rigidbody2D>().AddForce(attackDir.normalized * magicSpeed);
                 }
-                //magicInst.transform.SetParent(transform);
-                //Vector3 predic = new Vector3(0,0,0);
-                //switch (Stats.Facing)
-                //{
-                //    case Stats.Direction.LEFT:
-                //        predic = target.position - new Vector3(1,0,0); break;
-                //    case Stats.Direction.RIGHT:
-                //        predic = target.position + new Vector3(1, 0, 0); break;
-                //    case Stats.Direction.UP:
-                //        predic = target.position + new Vector3(0, 1, 0); break;
-                //    case Stats.Direction.DOWN:
-                //        predic = target.position - new Vector3(0, 1, 0); break;
-                //}
-                //magicInst.GetComponent<TargetProjectile>().SetTarget(predic);
-                //Vector2 attackDir = predic - transform.position;
-                //magicInst.GetComponent<Rigidbody2D>().AddForce(attackDir.normalized * magicSpeed);
-                //// Apply the amount of health this enemy takes away to its projectile. 
-                //magicInst.GetComponent<TargetProjectile>().SetDamage(damageDealt);
 
                 // Reset the interval timer.
                 attackTimer = 0f;

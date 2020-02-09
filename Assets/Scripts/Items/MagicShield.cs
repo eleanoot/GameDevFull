@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿// Shield the player from damage from magic attacks for the room. 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MagicShield : Item
 {
+    // The effect shown on use. 
     public GameObject magicEffect;
     public AudioClip useSfx;
 

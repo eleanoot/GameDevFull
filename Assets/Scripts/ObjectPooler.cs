@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Provide reusable objects for objects that get instantiated a lot e.g. magic projectiles. 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,13 +41,19 @@ public class ObjectPooler : MonoBehaviour
 
     public GameObject GetPooledObject(string tag)
     {
+        // Find the first unused object and return it for use. 
         for (int i = 0; i < pooledObjects.Count; i++)
         {
-            if (!pooledObjects[i].activeInHierarchy && pooledObjects[i].tag == tag)
+            if (pooledObjects[i] != null)
             {
-                return pooledObjects[i];
+                if (!pooledObjects[i].activeInHierarchy && pooledObjects[i].tag == tag)
+                {
+                    return pooledObjects[i];
+                }
             }
+            
         }
+        // If there's not enough in the pool and we're allowed to make more, do that. 
         foreach (ObjectPoolItem item in itemsToPool)
         {
             if (item.objectToPool.tag == tag)
@@ -63,11 +70,5 @@ public class ObjectPooler : MonoBehaviour
         return null;
     }
 
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

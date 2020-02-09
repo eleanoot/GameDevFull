@@ -113,7 +113,7 @@ public class RandomNumberGenerator : MonoBehaviour
 
     void OnDisable()
     {
-        //Tell our 'OnLevelFinishedLoading' function to stop listening for a scene change as soon as this script is disabled. Remember to always have an unsubscription for every delegate you subscribe to!
+        //Tell our 'OnLevelFinishedLoading' function to stop listening for a scene change as soon as this script is disabled. 
         SceneManager.sceneLoaded -= OnLevelFinishedLoading;
     }
 

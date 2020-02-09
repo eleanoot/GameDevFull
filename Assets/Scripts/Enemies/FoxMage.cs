@@ -65,12 +65,7 @@ public class FoxMage : Enemy
                         magicInst.SetActive(true);
                         magicInst.GetComponent<Rigidbody2D>().AddForce(n * magicSpeed);
                     }
-
-                    //GameObject magicInst = Instantiate(magic, transform.position, Quaternion.AngleAxis(angle, Vector3.forward));
-                    //magicInst.transform.SetParent(transform);
-                    //magicInst.GetComponent<Rigidbody2D>().AddForce(n * magicSpeed);
-                    //// Apply the amount of health this enemy takes away to its projectile. 
-                    //magicInst.GetComponent<Project>().SetDamage(damageDealt);
+                    
                     angle += 90f;
                 }
                 // Reset the interval timer.
